@@ -61,7 +61,11 @@ button {
     height: 80px;
     background-color: #000000;
 
-    a {
+    &__logo-a {
+        margin: auto 34px auto 0;
+    }
+
+    li a, .header__copyright a {
         color: #FFFFFF;
         font-size: $button-font-size;
         font-weight: $button-font-weight;
@@ -76,7 +80,6 @@ button {
     &__logo {
         width: 82px;
         height: 52px;
-        margin: auto 34px auto 0;
         color: #FFFFFF;
         text-align: center;
         font-size: 19.01px;
@@ -237,15 +240,12 @@ button {
     flex-wrap: wrap;
     justify-content: space-between;
 
-    // .cards__item
     &__item {
-        width: 366px;
-        height: 426px;
+        min-width: 366px;
+        min-height: 426px;
+        background: $color-orange;
         margin-bottom: 20px;
-        border: 1px solid #FA6F32;
         border-radius: 5px;
-        overflow: hidden;
-        background-color: #FFFFFF;
         transition: all .3s;
         cursor: pointer;
         &:hover {
@@ -253,9 +253,20 @@ button {
         }
     }
 
+    // .cards__item
+    &__item-in {
+        width: 364px;
+        height: 424px;
+        margin: 1px 0 0 1px;
+        //border: 1px solid #FA6F32;
+        border-radius: 4px;
+        overflow: hidden;
+        background-color: #FFFFFF;
+    }
+
     // .cards__picture
     &__picture {
-        min-width: 366px;
+        min-width: 364px;
         min-height: 366px;
         background-position: center;
         background-size: cover;
@@ -266,7 +277,7 @@ button {
     &__contet {
         display: flex;
         justify-content: space-between;
-        margin: 8px 16px;
+        margin: 7px 15px;
     }
 
     // .cards__cntent-text
@@ -433,13 +444,22 @@ button {
         margin: 0 30px;
     }
 
-    // .steps__box
-    &__box {
+    // .steps__box-border
+    &__box-border {
         width: 168px;
         height: 168px;
-        background: #FFFFFF;
-        border: 1px solid #FA6F32;
+        background: $color-orange;
         border-radius: 5px;
+    }
+
+    // .steps__box
+    &__box {
+        width: 166px;
+        height: 166px;
+        margin: 1px 0 0 1px;
+        background: #FFFFFF;
+        //border: 1px solid #FA6F32;
+        border-radius: 4px;
     }
 
     // .steps__text
@@ -638,11 +658,15 @@ button {
             margin-top: 35px;
 		}
 
-		// .footer-left__social-item
-		&__social-item {
+		// .footer-left__social-item a
+		&__social-item a{
             display: flex;
             flex-direction: row;
             margin-top: 10px;
+            color: #FFFFFF;
+            &:hover {
+                text-decoration: underline;
+            }
 		}
 
 		// .footer-left__icon
@@ -734,6 +758,10 @@ button {
             border-radius: 2px;
             font-size: 16px;
             line-height: 140%;
+            color: #FFFFFF;
+            &::placeholder {
+                color: #BDBDBD;
+            }
 		}
 
 		// .footer-right__submit-btn
@@ -746,6 +774,12 @@ button {
             border-radius: 5px;
             margin: 14px 0 0 6px;
             text-transform: capitalize;
+            &:hover{
+                background-color: #BDBDBD;
+            }
+            &:active{
+                background-color: #92ac97;
+            }
 		}
 
 		// .footer-right__copyright
