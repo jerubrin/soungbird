@@ -67,11 +67,13 @@ if(form2) {
     form2.onsubmit = () => {
         cost.classList.remove('donation__input-money_active')
         cost.classList.remove('donation__input-money_mistake')
-        cost.value = ""
-        cost.blur()
-        radio1.checked = false
-        radio2.checked = false
-        isInvalidCost = false
+        setTimeout(() => {
+            cost.value = ""
+            cost.blur()
+            radio1.checked = false
+            radio2.checked = true
+            isInvalidCost = false
+        }, 500)
     }
 
     //line
