@@ -66,6 +66,14 @@ module.exports = {
                 collapseWhitespace: !isDev
             }
         }),
+        new htmlWPPlugin({
+            template: "./src/donate.html",
+            filename: "donate.html",
+        }),
+        new htmlWPPlugin({
+            template: "./src/cam_panda_online.html",
+            filename: "cam_panda_online.html",
+        }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
             patterns: [
