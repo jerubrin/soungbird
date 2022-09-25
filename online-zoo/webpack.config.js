@@ -74,6 +74,10 @@ module.exports = {
             template: "./src/cam_panda_online.html",
             filename: "cam_panda_online.html",
         }),
+        new htmlWPPlugin({
+            template: "./src/map.html",
+            filename: "map.html",
+        }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
             patterns: [
