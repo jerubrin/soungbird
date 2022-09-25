@@ -269,7 +269,10 @@ button {
             transform: scale(1.055, 1.055);
         }
         &:hover .cards__contet{
-            margin-top: 17px;
+            position: relative;
+            z-index: 10;
+            margin-top: -42px;
+            color: #ffffff;
         }
     }
 
