@@ -157,8 +157,13 @@ button {
         height: 12px;
         background: url('../img/burger_menu.svg') center no-repeat;
         margin: auto 20px auto auto;
+        cursor: pointer;
+        transition: all .3s;
         @media screen and (max-width: $screen-phone) {
             margin: auto 9px auto auto;
+        }
+        &:hover {
+            transform: scale(1.25, 1.25);
         }
     }
 }
