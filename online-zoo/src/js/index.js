@@ -139,3 +139,23 @@ function onSelect(e) {
         default: digit.textContent = 0
     }
 }
+
+// burger
+const burgerButton = document.querySelector('.header__burger-menu')
+const burgerMenu = document.querySelector('.popup');
+const burgerMenuBack = document.querySelector('.popup-back');
+const burgerMenuLinks = [...document.querySelectorAll('.popup a')];
+
+const hideMenu = () => {
+    burgerMenu.classList.add('display-none')
+}
+
+const showMenu = () => {
+    burgerMenu.classList.remove('display-none')
+}
+
+burgerMenuBack.onclick = hideMenu
+burgerMenuLinks.forEach(it => it.onclick = hideMenu)
+burgerButton.onclick = showMenu
+
+
