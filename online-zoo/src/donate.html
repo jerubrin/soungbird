@@ -54,10 +54,10 @@
                             <ul class="donation__dots">
                                 <li class="donation__dot donation__dot_5k"></li>
                                 <li class="donation__dot donation__dot_2k"></li>
-                                <li class="donation__dot donation__dot_1k donation__dot_active"></li>
+                                <li class="donation__dot donation__dot_1k"></li>
                                 <li class="donation__dot donation__dot_500"></li>
                                 <li class="donation__dot donation__dot_250"></li>
-                                <li class="donation__dot donation__dot_100"></li>
+                                <li class="donation__dot donation__dot_100 donation__dot_active"></li>
                                 <li class="donation__dot donation__dot_50"></li>
                                 <li class="donation__dot donation__dot_25"></li>
                             </ul>
@@ -65,16 +65,16 @@
                         <ul class="donation__amount-money">
                             <li class="donation__money-text donation__money-text_5k">5000</li>
                             <li class="donation__money-text donation__money-text_2k">2000</li>
-                            <li class="donation__money-text donation__money-text_1k donation__money-text_active">1000</li>
+                            <li class="donation__money-text donation__money-text_1k">1000</li>
                             <li class="donation__money-text donation__money-text_500">500</li>
                             <li class="donation__money-text donation__money-text_250">250</li>
-                            <li class="donation__money-text donation__money-text_100">100</li>
+                            <li class="donation__money-text donation__money-text_100 donation__money-text_active">100</li>
                             <li class="donation__money-text donation__money-text_50">50</li>
                             <li class="donation__money-text donation__money-text_25">25</li>
                         </ul>
                     </div>
                     <form class="donation__form">
-                        <input type="number" class="donation__input-money" placeholder="Another amount" required>
+                        <input type="text" class="donation__input-money" placeholder="Another amount" required value="100">
                         <div class="donation__ragio-grope">
                             <div class="donation__ragio-wrapper donation__ragio-wrapper_monthly">
                                 <input type="radio" class="donation__ragio-monthly" value="monthly" name="money" required>
@@ -152,7 +152,7 @@
         </div>
     </footer>
 
-    <div class="popup not-sd-hd display-none">
+    <div class="popup not-sd-hd display-none invisible-block">
         <div class="popup-back"></div>
         <div class="popup-wrapper">
             <div class="burger-menu">
@@ -168,6 +168,7 @@
                     </ul>
                 </div>
             </div>
+            <a class="close-button"></a>
         </div>
     </div>
 </body>
