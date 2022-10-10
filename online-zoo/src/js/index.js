@@ -85,20 +85,16 @@ if(form2) {
     for(let price of priceList2) {
         price.onclick = e => onSelect(e)
     }
+
+    
+    cost.addEventListener("input", () => { 
+        if(cost.value.length > 4) cost.value = cost.value.slice(0,4)
+    })
     
     cost.addEventListener('keydown', e => {
-        e.preventDefault()
-        let digit = e.keyCode
-        if(digit == 8 && cost.value.length > 0) {
-            cost.value = cost.value.substr(0,cost.value.length - 1)
-        } else {
-            digit -= 48
-            if (digit > -1 && digit < 10 && cost.value.length < 4) {
-                cost.value += digit
-            }
+        if(e.key=='-' || e.key=='+' || e.key=='e' || e.key=="E"){
+            e.preventDefault()
         }
-        
-        if(cost.value.length < 4) cost.value = cost.value.substr(0,4)
         setTimeout(() => {
             if(cost.value == '25') selectCircle(7) 
             else if(cost.value == '50') selectCircle(6) 
@@ -111,11 +107,6 @@ if(form2) {
             else selectCircle(-1)
         }, 0)
     })
-
-    cost.onclick = (e) => {
-        cost.focus()
-        cost.selectionStart = cost.value.length
-    }
 };
 
 function findIndex(list, text) {
