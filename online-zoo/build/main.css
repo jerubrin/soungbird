@@ -3191,115 +3191,11 @@ button:active {
   line-height: 120%;
   overflow: hidden;
 }
-.popup-feedback__scroll-holder-back {
-  min-width: 599px;
-  height: 8px;
-  margin: 21px auto 31px;
-  background: linear-gradient(315.75deg, rgba(254, 189, 171, 0.74) 30.06%, rgba(243, 169, 248, 0.66) 50.74%, #E0D8F0 80.49%, #EAF7FE 127.9%, #EAF7FE 149.54%), linear-gradient(315.75deg, rgba(254, 189, 171, 0.74) 30.06%, rgba(243, 169, 248, 0.66) 50.74%, #E0D8F0 80.49%, #EAF7FE 127.9%, #EAF7FE 149.54%);
-  border-radius: 4px;
-}
-.popup-feedback__scroll-holder-back .progress {
-  min-width: 597px;
-  border-radius: 5px;
-  position: relative;
-  background: linear-gradient(315.75deg, rgba(254, 189, 171, 0.74) 30.06%, rgba(243, 169, 248, 0.66) 50.74%, #E0D8F0 80.49%, #EAF7FE 127.9%, #EAF7FE 149.54%), linear-gradient(315.75deg, rgba(254, 189, 171, 0.74) 30.06%, rgba(243, 169, 248, 0.66) 50.74%, #E0D8F0 80.49%, #EAF7FE 127.9%, #EAF7FE 149.54%);
-  border-radius: 5px;
-  padding: 1px;
-  height: 8px;
-}
-.popup-feedback__scroll-holder-back .progress input[type=range] {
-  accent-color: #F9804B;
-  min-width: 100%;
-  /* border: 1px solid #F9804B; */
-  outline: none;
-  background: #ccc;
-  color: #ccc;
-}
-.popup-feedback__scroll-holder-back .progress input[type=range] :focus {
-  border: 1px solid #F9804B;
-}
-.popup-feedback__scroll-holder-back .progress-input {
-  display: block;
-  max-width: 599px;
-  width: 100%;
-  height: 6px;
-  background: #f5f7f6;
-  margin: 0 auto;
-  margin-bottom: 3.1rem;
-  border-radius: 0.5rem;
-  outline: none;
-  -webkit-appearance: none;
-  transition: ease-in-out 0.5s;
-  cursor: pointer;
-}
-.popup-feedback__scroll-holder-back .progress-input:hover {
-  opacity: 1;
-}
-.popup-feedback__scroll-holder-back .progress-input::-webkit-slider-thumb {
-  max-width: 115px;
-  height: 6px;
-  width: 100%;
-  border-radius: 5px;
-  background-color: #f9804b;
-  -webkit-appearance: none;
-}
-.popup-feedback__scroll-holder-back .progress-input::-moz-range-thumb {
-  max-width: 115px;
-  height: 6px;
-  width: 100%;
-  border-radius: 5px;
-  background-color: #f9804b;
-  -webkit-appearance: none;
-}
-.popup-feedback__scroll-holder-back .progress-input::-ms-thumb {
-  max-width: 115px;
-  height: 6px;
-  width: 100%;
-  border-radius: 5px;
-  background-color: #f9804b;
-  -webkit-appearance: none;
-}
-.popup-feedback__scroll-holder-back .progress-input:focus {
-  outline: none;
-}
-.popup-feedback__scroll-holder {
-  width: 597px;
-  height: 6px;
-  margin: 1px 1px;
-  background-color: #F1F3F2;
-  border-radius: 2px;
-}
-@media screen and (max-width: 1400px) {
-  .popup-feedback__scroll-holder {
-    width: 388px;
-  }
-}
-.popup-feedback__scroll {
-  width: 19%;
-  height: 6px;
-  margin-top: 1px;
-  background: #FE9013;
-  border-radius: 5px;
-}
-.popup-feedback__button {
-  border-radius: 5px;
-}
-@media screen and (max-width: 999px) {
-  .popup-feedback__button {
-    margin: 24px auto;
-    width: 240px;
-  }
-}
-@media screen and (max-width: 639px) {
-  .popup-feedback__button {
-    margin: 15px auto;
-  }
-}
 .popup-feedback__close {
   width: 20px;
-  height: 20px;
+  height: 100%;
   margin: -8px 0 0 12px;
-  background: url(4dd8c411cb93d6ee0786.svg) center no-repeat;
+  background: url(4dd8c411cb93d6ee0786.svg) top center no-repeat;
 }
 
 @media screen and (max-width: 1400px) {
