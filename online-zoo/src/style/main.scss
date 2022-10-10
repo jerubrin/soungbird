@@ -1305,6 +1305,7 @@ button {
         @media screen and (max-width: $screen-tablet) {
             flex-direction: column;
             max-height: 372px;
+            margin-left: 0 !important;
             //Scroll-tablet
             &::-webkit-scrollbar { display: none; }
             -ms-overflow-style: none;
@@ -1587,37 +1588,6 @@ button {
             margin-left: 7px;
         }
     }
-}
-
-.avatar-1 {}
-
-.avatar-2 {
-    background-image: url('../img/avatars/Oskar.png');
-}
-.avatar-3 {
-    background-image: url('../img/avatars/Fredericka.png');
-}
-.avatar-4 {
-    background-image: url('../img/avatars/proper.png');
-}
-.avatar-5 {
-    background-image: url('../img/avatars/spiderman.png');
-}
-.avatar-6 {
-    background-image: url('../img/avatars/troll.png');
-}
-.avatar-7 {
-    background-image: url('../img/avatars/avatar.png');
-}
-.avatar-8 {
-    background-image: url('../img/avatars/misterBin.png');
-}
-.avatar-9 {
-    background-image: url('../img/avatars/ironMan.png');
-}
-.avatar-10 {}
-.avatar-11 {
-    background-image: url('../img/avatars/shrek.png');
 }
 
 .footer {
@@ -2669,38 +2639,6 @@ button {
 
 
 
-.hd-only {
-    @media screen and (max-width: $screen-small-desctop) {
-        display: none;
-    }
-}
-
-.not-hd {
-    @media screen and (min-width: ($screen-small-desctop + 1)) {
-        display: none;
-    }
-}
-
-.sd-hd-only {
-    @media screen and (max-width: $screen-tablet) {
-        display: none;
-    }
-}
-
-.not-sd-hd {
-    @media screen and (min-width: ($screen-tablet + 1)) {
-        display: none;
-    }
-}
-
-.mobile-only {
-    display: none;
-    @media screen and (max-width: $screen-phone) {
-        display: block;
-    }
-}
-
-
 //BURGER-MENU
 
 .popup {
@@ -2786,10 +2724,6 @@ button {
     }
 }
 
-.display-none {
-    display: none;
-}
-
 
 
 //CARDS SLIDER
@@ -2869,4 +2803,301 @@ button {
         margin-left: 0;
         margin-right: 0;
     }
+}
+
+
+.popup-feedback {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    .popup-back {
+        position: absolute;
+    }
+}
+
+.popup-feedback__wrapper{
+    //position: fixed;
+    margin: auto;
+    z-index: 9999;
+}
+
+.popup-feedback {
+
+    display: flex;
+    justify-content: space-between;
+    overflow-x: hidden;
+    @media screen and (max-width: $screen-tablet) {
+        flex-direction: column;
+    }
+    &__wrapper {
+        display: flex;
+        transition: all .5s;
+    }
+    // .feedbacks__card-back
+    &__card-back {
+        margin: 0;
+        width: 268px;
+        height: 391px;
+        background: $color-pink-gradient;
+        border-radius: 20px;
+    }
+
+    // .feedbacks__card
+    &__card {
+        display: flex;
+        flex-direction: column;
+        margin: 2px;
+        width: 264px;
+        height: 387px;
+        background: #F1F3F2;
+        border-radius: 18px;
+    }
+
+    // .feedbacks__top-card
+    &__top-card {
+        display: flex;
+        margin: 13px 14px 11px;
+    }
+
+    // .feedbacks__avatar
+    &__avatar {
+        width: 37px;
+        height: 37px;
+        background: url('../img/avatars/no-avatar.svg');
+    }
+
+    // .feedbacks__name-and-local
+    &__name-and-local {
+        height: 37px;
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    // .feedbacks__user-name
+    &__user-name {
+        line-height: 120%;
+    }
+
+    // .feedbacks__location
+    &__location {
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 120%;
+        color: #BDBDBD;
+    }
+
+    // .feedbacks__dot
+    &__dot {
+        margin: 0 3px;
+    }
+
+    // .feedbacks__text-card
+    &__text-card {
+        margin: 0 15px 19px 14px;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 120%;
+        overflow: hidden;
+    }
+
+    // .feedbacks__scroll-holder-back
+    &__scroll-holder-back {
+        min-width: 599px;
+        height: 8px;
+        margin: 21px auto 31px;
+        background: $color-pink-gradient;
+        border-radius: 4px;
+        
+        .progress {
+            min-width: 597px;
+            border-radius: 5px;
+            position: relative;
+            background: linear-gradient(315.75deg, rgba(254, 189, 171, 0.74) 30.06%, rgba(243, 169, 248, 0.66) 50.74%, #E0D8F0 80.49%, #EAF7FE 127.9%, #EAF7FE 149.54%), linear-gradient(315.75deg, rgba(254, 189, 171, 0.74) 30.06%, rgba(243, 169, 248, 0.66) 50.74%, #E0D8F0 80.49%, #EAF7FE 127.9%, #EAF7FE 149.54%);
+            border-radius: 5px;
+            padding: 1px;
+            height: 8px;
+
+            input[type=range] {
+                accent-color: #F9804B;
+                min-width: 100%;
+                /* border: 1px solid #F9804B; */
+                outline: none;
+                background: #ccc;
+                color: #ccc;
+            }
+            input[type=range] :focus {
+                border: 1px solid #F9804B;
+            }
+        }
+          
+        .progress-input {
+            display: block;
+            max-width: 599px;
+            width: 100%;
+            height: 6px;
+            background: #f5f7f6;
+            margin: 0 auto;
+            margin-bottom: 3.1rem;
+            border-radius: .5rem;
+            outline: none;
+            -webkit-appearance: none;
+            transition: ease-in-out .5s;
+            cursor: pointer;
+            &:hover {
+                opacity: 1
+            }
+        }
+          
+        .progress-input::-webkit-slider-thumb {
+            max-width: 115px;
+            height: 6px;
+            width: 100%;
+            border-radius: 5px;
+            background-color: #f9804b;
+            -webkit-appearance: none
+        }
+        
+        .progress-input::-moz-range-thumb {
+            max-width: 115px;
+            height: 6px;
+            width: 100%;
+            border-radius: 5px;
+            background-color: #f9804b;
+            -webkit-appearance: none
+        }
+        
+        .progress-input::-ms-thumb {
+            max-width: 115px;
+            height: 6px;
+            width: 100%;
+            border-radius: 5px;
+            background-color: #f9804b;
+            -webkit-appearance: none
+        }
+          
+        .progress-input:focus {
+            outline: none
+        }
+    }
+
+    // .feedbacks__scroll-holder
+    &__scroll-holder {
+        width: 597px;
+        height: 6px;
+        margin: 1px 1px;
+        background-color: #F1F3F2;
+        border-radius: 2px;
+        @media screen and (max-width: $screen-small-desctop) {
+            width: 388px;
+        }
+    }
+
+    // .feedbacks__scroll
+    &__scroll {
+        width: 19%;
+        height: 6px;
+        margin-top: 1px;
+        background: #FE9013;
+        border-radius: 5px;
+    }
+
+    // .feedbacks__button
+    &__button {
+        border-radius: 5px;
+        @media screen and (max-width: $screen-tablet) {
+            margin: 24px auto;
+            width: 240px;
+        }
+        @media screen and (max-width: $screen-phone) {
+            margin: 15px auto;
+        }
+    }
+
+    &__close {
+        width: 20px;
+        height: 20px;
+        margin: -8px 0 0 12px;
+        background: url('../img/x_icon_popup.svg') center no-repeat;
+    }
+}
+
+
+
+
+
+
+//SCREEN SIZE
+.hd-only {
+    @media screen and (max-width: $screen-small-desctop) {
+        display: none;
+    }
+}
+
+.not-hd {
+    @media screen and (min-width: ($screen-small-desctop + 1)) {
+        display: none;
+    }
+}
+
+.sd-hd-only {
+    @media screen and (max-width: $screen-tablet) {
+        display: none;
+    }
+}
+
+.not-sd-hd {
+    @media screen and (min-width: ($screen-tablet + 1)) {
+        display: none;
+    }
+}
+
+.mobile-only {
+    display: none;
+    @media screen and (max-width: $screen-phone) {
+        display: block;
+    }
+}
+
+.display-none {
+    display: none;
+}
+
+
+//
+.avatar-1 {}
+
+.avatar-2 {
+    background-image: url('../img/avatars/Oskar.png');
+}
+.avatar-3 {
+    background-image: url('../img/avatars/Fredericka.png');
+}
+.avatar-4 {
+    background-image: url('../img/avatars/proper.png');
+}
+.avatar-5 {
+    background-image: url('../img/avatars/spiderman.png');
+}
+.avatar-6 {
+    background-image: url('../img/avatars/troll.png');
+}
+.avatar-7 {
+    background-image: url('../img/avatars/avatar.png');
+}
+.avatar-8 {
+    background-image: url('../img/avatars/misterBin.png');
+}
+.avatar-9 {
+    background-image: url('../img/avatars/ironMan.png');
+}
+.avatar-10 {}
+.avatar-11 {
+    background-image: url('../img/avatars/shrek.png');
 }
