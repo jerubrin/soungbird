@@ -477,13 +477,10 @@ sliderInput.addEventListener('input', function () {
     feedbacksWrapper.classList.add(className)
 }, false);
 
-console.log(feedbacksWrapper.children)
-
 let isFeedbackOpened = false
 
 for (let it of feedbacksWrapper.children) {
     it.onclick = e => {
-        console.log(it)
         const number = it.querySelector('.feedbacks__avatar').classList[1]
         const name = it.querySelector('.feedbacks__user-name').textContent
         const loacation = it.querySelector('.feedbacks__location').children[0].textContent
