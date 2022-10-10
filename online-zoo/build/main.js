@@ -574,15 +574,14 @@ for (let it of feedbacksWrapper.children) {
     }
 }
 
-document.onclick = () => {
+const closeFeedback = e => {
     if(!isFeedbackOpened) return
     document.querySelector('.popup-feedback').classList.add('display-none')
     isFeedbackOpened = false
 }
 
-// feedbacksWrapper.children.forEach(it => it.onclick = e => {
-//     console.log(e)
-// })
+document.querySelector('.popup-feedback .popup-back').onclick = closeFeedback
+document.querySelector('.popup-feedback__close').onclick = closeFeedback
 })();
 
 /******/ })()
