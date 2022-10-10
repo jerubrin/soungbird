@@ -1274,10 +1274,43 @@ button {
 
     display: flex;
     justify-content: space-between;
+    overflow-x: hidden;
     @media screen and (max-width: $screen-tablet) {
         flex-direction: column;
     }
-
+    &__wrapper {
+        display: flex;
+        transition: all .5s;
+        &_margin_0{margin-left: 0;}
+        &_margin_1{margin-left: -297px;}
+        &_margin_2{margin-left: -594px;}
+        &_margin_3{margin-left: -891px;}
+        &_margin_4{margin-left: -1188px;}
+        &_margin_5{margin-left: -1485px;}
+        &_margin_6{margin-left: -1782px;}
+        &_margin_7{margin-left: -2079px;}
+        &_margin_8{margin-left: -2376px;}
+        //323,5
+        @media screen and (max-width: $screen-small-desctop) {
+            &_margin_0{margin-left: 0;}
+            &_margin_1{margin-left: -323.5px;}
+            &_margin_2{margin-left: -647px;}
+            &_margin_3{margin-left: -970.5px;}
+            &_margin_4{margin-left: -1294px;}
+            &_margin_5{margin-left: -1617.5px;}
+            &_margin_6{margin-left: -1941px;}
+            &_margin_7{margin-left: -2264.5px;}
+            &_margin_8{margin-left: -2588px;}
+        }
+        @media screen and (max-width: $screen-tablet) {
+            flex-direction: column;
+            max-height: 372px;
+            //Scroll-tablet
+            &::-webkit-scrollbar { display: none; }
+            -ms-overflow-style: none;
+            scrollbar-width: none; 
+        }
+    }
     // .feedbacks__card-back
     &__card-back {
         margin: 0;
@@ -1285,14 +1318,24 @@ button {
         height: 391px;
         background: $color-pink-gradient;
         border-radius: 20px;
+        margin-right: 29px;
+
         @media screen and (max-width: $screen-small-desctop) {
             width: 293px;
             height: 392px;
+            margin-right: 30.5px;
         }
         @media screen and (max-width: $screen-tablet) {
             width: 600px;
             height: 109px;
+            margin-right: 0;
             margin: 0 auto 15px;
+            cursor: pointer;
+            transition: all .3s;
+            &:hover {
+                transform: scale(1.02, 1.02);
+                transition: all .3s;
+            }
         }
         @media screen and (max-width: $screen-phone) {
             width: 299px;
@@ -1546,19 +1589,36 @@ button {
     }
 }
 
+.avatar-1 {}
+
 .avatar-2 {
     background-image: url('../img/avatars/Oskar.png');
-    @media screen and (max-width: $screen-small-desctop) {
-        background-image: url('../img/avatars/Mila.png');
-    }
 }
 .avatar-3 {
     background-image: url('../img/avatars/Fredericka.png');
 }
 .avatar-4 {
-    background-image: url('../img/avatars/Mila.png');
+    background-image: url('../img/avatars/proper.png');
 }
-
+.avatar-5 {
+    background-image: url('../img/avatars/spiderman.png');
+}
+.avatar-6 {
+    background-image: url('../img/avatars/troll.png');
+}
+.avatar-7 {
+    background-image: url('../img/avatars/avatar.png');
+}
+.avatar-8 {
+    background-image: url('../img/avatars/misterBin.png');
+}
+.avatar-9 {
+    background-image: url('../img/avatars/ironMan.png');
+}
+.avatar-10 {}
+.avatar-11 {
+    background-image: url('../img/avatars/shrek.png');
+}
 
 .footer {
     height: 443px;
@@ -2664,6 +2724,7 @@ button {
     width: 30px;
     height: 30px;
     transition: all .3s;
+    cursor: pointer;
     &:hover {
         transform: scale(1.2, 1.2);
     }

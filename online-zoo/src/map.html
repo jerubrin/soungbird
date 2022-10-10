@@ -9,21 +9,22 @@
 <body>
     <header class="header">
         <div class="container">
-            <a class="header__logo-a" href="index.html">
+            <a class="header__logo-a" href="#">
                 <h1 class="header__logo">PetStory online</h1>
             </a>
-            <nav class="header__nav">
+            <nav class="header__nav sd-hd-only">
                 <ul>
                     <li class="links"><a href="index.html">About</a></li>
-                    <li class="links disabled-link"><a href="#">Map</a></li>
+                    <li class="links disabled-link"><a href="map.html">Map</a></li>
                     <li class="links"><a href="#">Zoos</a></li>
                     <li class="links"><a href="donate.html">Donate</a></li>
                     <li class="links"><a href="#">Contact us</a></li>
                 </ul>
             </nav>
-            <div class="header__copyright">
+            <div class="header__copyright sd-hd-only">
                 <a href="https://www.figma.com/file/jfEFwkXVj1WRq7sUHDr8os/PetStory-online">Designed by ©</a>
             </div>
+            <div class="header__burger-menu not-sd-hd"></div>
         </div>
     </header>
     <main class="main">
@@ -90,5 +91,25 @@
             </div>
         </div>
     </footer>
+
+    <div class="popup not-sd-hd display-none">
+        <div class="popup-back"></div>
+        <div class="popup-wrapper">
+            <div class="burger-menu">
+                <a class="burger-menu__logo" href="index.html">PetStory online</a>
+                <div class="burger-menu__nav">
+                    <ul>
+                        <li class="links"><a href="index.html">About</a></li>
+                        <li class="links disabled-link"><a href="map.html">Map</a></li>
+                        <li class="links"><a href="#">Zoos</a></li>
+                        <li class="links"><a href="donate.html">Donate</a></li>
+                        <li class="links"><a href="#">Contact us</a></li>
+                        <li><a href="https://www.figma.com/file/jfEFwkXVj1WRq7sUHDr8os/PetStory-online">Designed by ©</a></li>
+                    </ul>
+                </div>
+            </div>
+            <a class="close-button"></a>
+        </div>
+    </div>
 </body>
 </html>
