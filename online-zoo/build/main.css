@@ -3194,7 +3194,8 @@ button:active {
 .popup-feedback__close {
   width: 20px;
   height: 100%;
-  margin: -8px 0 0 12px;
+  margin-top: -8px;
+  padding-left: 12px;
   background: url(4dd8c411cb93d6ee0786.svg) top center no-repeat;
 }
 

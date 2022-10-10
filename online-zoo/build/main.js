@@ -242,7 +242,7 @@ function selectCircle(index) {
         break;
         case 7: digit.textContent = 1
             cost.value = 25
-        default: digit.textContent = cost.value * 4 / 100
+        default: digit.textContent = Math.trunc(cost.value * 4 / 100)
     }
 }
 
@@ -397,6 +397,8 @@ function turnRight() {
             let secondChild = cardsContainer.children[1]
             cardsContainer.removeChild(firstChild)
             cardsContainer.removeChild(secondChild)
+            changeCardsContent()
+            refreshHDSD(cardsContainer)
             lockMovingCards = false
         }, timeoutValue + 5);
         readyToAdd = true;
@@ -404,6 +406,8 @@ function turnRight() {
 
     refreshHDSD(cardsContainer)
     setTimeout(() => {
+        changeCardsContent()
+        refreshHDSD(cardsContainer)
         lockMovingCards = false
     }, timeoutValue + 5);
 }
@@ -441,6 +445,8 @@ const turnLeft = () => {
             let secondChild = cardsContainer.children[3]
             cardsContainer.removeChild(firstChild)
             cardsContainer.removeChild(secondChild)
+            changeCardsContent()
+            refreshHDSD(cardsContainer)  
             lockMovingCards = false
         }, timeoutValue + 5);
         readyToAdd = true;
@@ -448,6 +454,8 @@ const turnLeft = () => {
 
     refreshHDSD(cardsContainer)
     setTimeout(() => {
+        changeCardsContent()
+        refreshHDSD(cardsContainer)  
         lockMovingCards = false
     }, timeoutValue + 5);
 }
@@ -455,6 +463,26 @@ const turnLeft = () => {
 btnLeft.forEach(it => it.onclick = turnLeft)
 btnRight.forEach(it => it.onclick = turnRight)
 
+const newCards = () => cardsArray
+    .sort((a, b) => Math.random()*10 - 5)
+    .sort((a, b) => Math.random()*10 - 5)
+    .sort((a, b) => Math.random()*10 - 5)
+    .slice(0, 6)
+    .join('\n')
+
+const changeCardsContent = () => {
+    //document.querySelector('.cards__slider-wrapper')
+    let [leftIndex, rightIndex] = [0, 2]
+    
+    console.log(cardsContainer.children.length)
+    if(cardsContainer.children.length == 3) {
+        leftIndex = 0; rightIndex = 2;
+    } else {
+        leftIndex = 1; rightIndex = 3;
+    }
+    cardsContainer.children[leftIndex].innerHTML = newCards()
+    cardsContainer.children[rightIndex].innerHTML = newCards()
+}
 
 //FEEDBACKS
 let feedbacksWrapper = document.querySelector('.testimonials__feedbacks-wrapper')
@@ -540,13 +568,10 @@ sliderInput.addEventListener('input', function () {
     feedbacksWrapper.classList.add(className)
 }, false);
 
-console.log(feedbacksWrapper.children)
-
 let isFeedbackOpened = false
 
 for (let it of feedbacksWrapper.children) {
     it.onclick = e => {
-        console.log(it)
         const number = it.querySelector('.feedbacks__avatar').classList[1]
         const name = it.querySelector('.feedbacks__user-name').textContent
         const loacation = it.querySelector('.feedbacks__location').children[0].textContent
