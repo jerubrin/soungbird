@@ -1,4 +1,5 @@
 import selectAll from 'css-select'
+import { doc } from 'prettier'
 import '../style/main.scss'
 
 let email = document.querySelector('input.footer-right__email')
@@ -392,3 +393,88 @@ const turnLeft = () => {
 
 btnLeft.forEach(it => it.onclick = turnLeft)
 btnRight.forEach(it => it.onclick = turnRight)
+
+
+//FEEDBACKS
+let feedbacksWrapper = document.querySelector('.testimonials__feedbacks-wrapper')
+let sliderInput = document.querySelector('input.progress-input')
+
+const feedbackTemplate = (number, name, loacation, date, text) => `<div class="feedbacks__card-back">
+    <div class="feedbacks__card">
+        <div class="feedbacks__top-card">
+            <div class="feedbacks__avatar avatar-${number}"></div>
+            <div class="feedbacks__name-and-local">
+                <div class="feedbacks__user-name">${name}</div>
+                <div class="feedbacks__location">
+                    <span>${loacation}</span>
+                    <span class="feedbacks__dot">•</span>
+                    <span>${date}</span>
+                </div>
+            </div>
+        </div>
+        <div class="feedbacks__text-card">
+            ${text}
+        </div>
+    </div>
+</div>`
+
+const textsLorem = [
+    `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugiat illum suscipit dolore! Delectus repellat obcaecati ex doloremque iusto, est autem deserunt, molestiae consequuntur distinctio laborum blanditiis dolores exercitationem recusandae expedita.`,
+    `Quod, vero. Temporibus molestiae, voluptatem itaque quia omnis iusto aperiam nulla suscipit doloremque inventore porro repellendus, soluta ut delectus iure, quas voluptate.`,
+    `Eos eius hic eaque, inventore eum pariatur nihil architecto accusamus alias dolores. Aut, at. Ut cumque quibusdam veritatis voluptas, sunt ipsam provident!`,
+    `Dignissimos quod iure fuga nobis adipisci in voluptatum architecto, odit excepturi repellat qui quam possimus, esse laborum soluta perspiciatis velit optio numquam.`,
+    `Non asperiores quos distinctio quia autem, voluptatem cupiditate magnam sed corrupti, consectetur vel id saepe earum. Repudiandae cum minima dignissimos doloribus mollitia.`,
+    `Odit velit amet, vitae numquam, quis sapiente minima, eligendi incidunt dolorum nobis accusamus impedit nesciunt earum excepturi perspiciatis iure ipsa ab vel!`,
+    `Nam voluptas aperiam veniam architecto, assumenda totam quam sunt debitis sapiente quis? Suscipit consectetur natus sit facilis non accusantium veritatis, aliquam mollitia!`,
+    `Veritatis vel optio molestias commodi repellendus blanditiis, dicta esse ipsam sunt. Quas, temporibus perferendis velit omnis culpa tempore iusto odit? Dolorem, ratione!`,
+    `Nobis, rem repudiandae! Voluptates repellat odit, eius illo eveniet reiciendis error aliquam asperiores, accusantium autem culpa corporis, nisi assumenda voluptas voluptatem magni!`,
+    `Porro, hic. Dolor exercitationem ratione, fugit eos iusto dolorum repellat eligendi quod tenetur a quis molestiae ullam, quisquam aliquid doloremque esse at!`,
+    `Ab soluta est laboriosam odit maiores libero quos ullam commodi! Placeat alias vel ratione at labore sint asperiores pariatur voluptates mollitia magnam.`,
+]
+
+const minusDay = days => {
+    let date = new Date()
+    date.setDate(date.getDate() - days)
+    return date.toLocaleDateString()
+}
+
+const dateList = [
+    "Today",
+    "Yesterday",
+    minusDay(2),
+    minusDay(3),
+    minusDay(4),
+    minusDay(5),
+]
+
+const getRandomText = () => textsLorem[Math.trunc(Math.random()*10)]+'<br>'+textsLorem[Math.trunc(Math.random()*10)]+'<br>'+textsLorem[Math.trunc(Math.random()*10)]+'<br>'+textsLorem[Math.trunc(Math.random()*10)]
+const getRandomDate = () => dateList[Math.trunc(Math.random()*5)]
+
+const feedbacksList = [
+    feedbackTemplate(1, "Michael John", "Austria", getRandomDate(), getRandomText()),
+    feedbackTemplate(2, "Oska Samborsky", "Russia", getRandomDate(), getRandomText()),
+    feedbackTemplate(3, "Fredericka Michelin", "UK", getRandomDate(), getRandomText()),
+    feedbackTemplate(4, "Mila Riksha", "USA", getRandomDate(), getRandomText()),
+    feedbackTemplate(5, "Yona Orli", "Israel", getRandomDate(), getRandomText()),
+    feedbackTemplate(6, "Iokaste Pontus", "Greece", getRandomDate(), getRandomText()),
+    feedbackTemplate(7, "Nihal Firuze", "Turkey", getRandomDate(), getRandomText()),
+    feedbackTemplate(8, "Johannes Laila", "Denmark", getRandomDate(), getRandomText()),
+    feedbackTemplate(9, "Madeleine Pontus", "Sweden", getRandomDate(), getRandomText()),
+    feedbackTemplate(10, "Gbemisola Wekesa", "South Africa", getRandomDate(), getRandomText()),
+    feedbackTemplate(11, "Ayaan Kyō", "Japan", getRandomDate(), getRandomText()),
+].sort((a, b) => Math.random()*10 - 5)
+    .sort((a, b) => Math.random()*10 - 5)
+    .sort((a, b) => Math.random()*10 - 5)
+    .join('\n');
+
+feedbacksWrapper.innerHTML = feedbacksList;
+
+//sliderInput.
+sliderInput.addEventListener('input', function () {
+    const classTemplate = "feedbacks__wrapper_margin_"
+    const className = classTemplate + sliderInput.value
+    for (let i = 0; i < 9; i++) {
+        feedbacksWrapper.classList.remove(classTemplate+i)
+    }
+    feedbacksWrapper.classList.add(className)
+}, false);
