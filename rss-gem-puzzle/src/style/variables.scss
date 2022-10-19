@@ -1,0 +1,24 @@
+@use "sass:math";
+
+$font-arial: 'Arial';
+$p-font-size: 16px;
+
+$main-color: #383dc8;
+$light-color: #72a3eb;
+$mark-color: #04098e;
+$background-color: #0d3d62;
+$background-game: #1d3560;
+$button-color: #e2e7ff;
+
+$disabled-background:#3b3c56;
+$disabled-mark-color: #151529;
+$disabled-color: #9095af;
+
+$white-color: #FFFFFF;
+
+$container-width: 600px;
+$container-width-tablet: 450px;
+$container-width-phone: 320px;
+
+$screen-tablet: 1399px;
+$screen-phone: 999px
