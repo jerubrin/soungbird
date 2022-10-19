@@ -33,10 +33,11 @@ let gameState = {
         this.timeNode.innerHTML = str
     },
     start(setRandomPosition) {
+        blureGame(false)
         playButton()
-        this.setNewGameArray()
         console.log(gameState)
         if (this.isFinished) {
+            this.setNewGameArray()
             setRandomPosition()
             this.setTime(0)
             this.setMovies(0)
@@ -49,6 +50,7 @@ let gameState = {
     stop() {
         playButton()
         this.isStarted = false
+        if(!this.isFinished) blureGame(true)
     },
     setSize(size, refNewSize) {
         playButton()
@@ -413,8 +415,8 @@ function isFinishedGame() {
         const winStr = `Hooray! You solved the puzzle in ${makeTimeStr(gameState.time)} and ${gameState.movies} moves!`
         showMessage(winStr)
         addNewScore(createScore(gameState.size, gameState.movies, gameState.time))
-        gameState.stop()
         gameState.isFinished = true
+        gameState.stop()
         //TODO: save results
     }
 }
@@ -608,7 +610,7 @@ function saveProgress() {
             isStarted: gameState.isStarted
         })
     localStorage.setItem("gameStr", gameStr)
-    showMessage("Progress saved! It will load automaticly after loading game!")
+    showMessage("Progress saved! It will load automaticly after loading game! (only if you don't complete the puzzle)")
     playMessage()
 }
 
@@ -642,4 +644,13 @@ document.querySelector('.restart-icon').onclick = () => {
     gameState.isFinished = true
     gameState.setNewGameArray()
     gameState.start(setRandomPosition)
+}
+
+//blure
+function blureGame(isBlure) {
+    document.querySelectorAll('.game-field__boun').forEach(elem => {
+        isBlure ? 
+        elem.classList.add('game-field__blure') :
+        elem.classList.remove('game-field__blure')
+    })
 }

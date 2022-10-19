@@ -210,6 +210,9 @@ body{
         cursor: default;
         z-index: 0;
     }
+    &__blure {
+        filter: blur(0.5rem);
+    }
 }
 
 
@@ -293,7 +296,7 @@ body{
         font-size: 13px;
     }
     &__wrapper {
-        max-height: calc(70vh - 20px);
+        max-height: calc(60vh - 20px);
         overflow-y: auto;
     }
     &__title {

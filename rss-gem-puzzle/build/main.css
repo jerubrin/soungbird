@@ -308,6 +308,9 @@ body {
   cursor: default;
   z-index: 0;
 }
+.game-field__blure {
+  filter: blur(0.5rem);
+}
 
 .current-size {
   text-align: center;
@@ -405,7 +408,7 @@ body {
   }
 }
 .score-block__wrapper {
-  max-height: calc(70vh - 20px);
+  max-height: calc(60vh - 20px);
   overflow-y: auto;
 }
 .score-block__title {
