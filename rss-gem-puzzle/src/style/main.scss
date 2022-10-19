@@ -9,6 +9,14 @@ body{
     background-color: $background-game;
     color: $white-color;
     display: flex;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                    not supported by any browser */
 }
 
 .game-block {
@@ -31,25 +39,56 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    .up-button {
-        padding: 4px 10px;
-        background-color: $main-color;
-        border: 2px solid $mark-color;
-        color: $button-color;
-        border-radius: 8px;
-        font-size: 1.4rem;
-        text-transform: uppercase;
+}
 
-        &:disabled {
-            background-color: $disabled-background;
-            border: 2px solid $disabled-mark-color;
+.up-button {
+    padding: 4px 10px;
+    background-color: $main-color;
+    border: 2px solid $mark-color;
+    color: $button-color;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+
+    &:disabled {
+        background-color: $disabled-background;
+        border: 2px solid $disabled-mark-color;
+    }
+    &:hover {
+        background-color: $mark-color;
+    }
+    &:active {
+        background-color: $light-color;
+    }
+    @media screen and (max-width: 640px) {
+        font-size: 1.1rem;
+    }
+}
+
+.text-to-rev {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 100;
+    color: #e1ebf6;
+}
+.easy-button{
+    margin-top: 10px;
+    &_active{
+        background-color: #b27641;
+        border-color: #98561b;
+        &:hover{
+            background-color: #98561b;
         }
-        &:hover {
-            background-color: $mark-color;
-        }
-        &:active {
-            background-color: $light-color;
-        }
+    }
+}
+.sound-button {
+    width: 36px;
+    background-image: url(../assets/img/svg/volume-on.svg);
+    background-size: 30px;
+    &_off {
+        background-image: url(../assets/img/svg/volume-off.svg);
+        background-size: 30px;
     }
 }
 
@@ -94,6 +133,7 @@ body{
         font-size: 2.5rem;
         cursor: pointer;
         transition: .2s;
+        z-index: 1;
         @media screen and (max-width: 640px) {
             width: 40px;
             height: 40px;
@@ -101,8 +141,11 @@ body{
         }
     }
     &__0{
-        opacity: 0;
-        visibility: hidden;
+        background: $background-color;
+        border: none;
+        background-color: #aad2ff;
+        cursor: default;
+        z-index: 0;
     }
 }
 
@@ -135,6 +178,7 @@ body{
     margin-top: auto;
     background: rgba(9, 70, 83, 0.7);
     transition: all .5s;
+    z-index: 10;
     .win-message {
         padding: 20px;
         min-width: 200px;
@@ -150,27 +194,57 @@ body{
     opacity: 0;
 }
 
+.display-none {
+    display: none;
+}
+
 .score-block {
-    width: 40%;
-    height: 80%;
+    width: 500px;
+    max-width: 90%;
+    max-height: 80%;
     background-color: #e1ebf6;
     border-radius: 20px;
     padding: 20px;
+    &__wrapper {
+        max-height: calc(70vh - 20px);
+        overflow-y: auto;
+    }
     &__title {
         color: $mark-color;
         text-align: center;
         font-size: 1.8rem;
+        margin-bottom: 20px;
     }
     &__scoreGrid {
         width: 100%;
         min-height: 20px;
     }
+    &__grid {
+        display: grid;
+        gap: 5px;
+        grid-template-columns: auto auto auto auto;
+
+        .grid-header {
+            padding: 5px;
+            border-radius: 5px;
+            background-color: $background-color;
+        }
+        
+        .grid-element {
+            padding: 5px;
+            border-radius: 5px;
+            background-color: $light-color;
+            color: $mark-color;
+        }
+    }
 }
 
-.grid-header {
-
-}
-
-.grid-element {
-    
+[draggable="true"] {
+    /*
+   To prevent user selecting inside the drag source
+  */
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }

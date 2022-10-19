@@ -75,8 +75,12 @@ module.exports = {
                 //     noErrorOnMissing: true
                 // },
                 {
-                    from: path.resolve(__dirname, 'src/img/favicon/favicon.ico'),
+                    from: path.resolve(__dirname, 'src/assets/img/favicon/favicon.ico'),
                     to: path.resolve(__dirname, 'build/assets')
+                },
+                {
+                    from: path.resolve(__dirname, 'src/assets/sound/*.mp3'),
+                    to: ''
                 }
             ]
         }),
@@ -107,16 +111,10 @@ module.exports = {
                 test: /\.(ttf|woff|woff2|eot)$/,
                 type: 'asset/resource'
             },
-            // {
-            //     test: /\.m?js&/,
-            //     exclude: /node_modules/,
-            //     use: {
-            //         loader: "babel-loader",
-            //         options: {
-            //             presets: ['@babel/preset-env']
-            //         }
-            //     }
-            // },
+            {
+                test: /\.mp3$/,
+                type: 'asset/resource'
+            },
         ]
     }
 }
