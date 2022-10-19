@@ -1,5 +1,131 @@
-import '../style/main.scss'
-import {createNewElement, createNewElements} from '../js/mylittlefw.js'
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/style/main.scss":
+/*!*****************************!*\
+  !*** ./src/style/main.scss ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./src/js/mylittlefw.js":
+/*!******************************!*\
+  !*** ./src/js/mylittlefw.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createNewElement": () => (/* binding */ createNewElement),
+/* harmony export */   "createNewElements": () => (/* binding */ createNewElements)
+/* harmony export */ });
+// Create new element with one string
+// tag_name.class-name.another-class-name.how-many-that-you-need-classes=content
+// For example:
+// div.main-block.red-color.display-none=this is content inside block
+function createNewElement(data){
+    let vals = data.split("=")
+    let htmlData = vals[0].split('.')
+    let _contentData = vals.length > 1 ? vals.filter((_, i) => i != 0).join('=') : ''
+    htmlData[0] = htmlData[0].split('').filter(ch => ch != ' ').join('')
+    let _name = htmlData[0] == '' ? 'div' : htmlData[0];
+    let _classList = htmlData.filter((_, i) => i != 0)
+    let element = document.createElement(_name);
+    _classList = _classList.map(it => 
+        it.split('').filter(ch => ch != ' ').join('')
+    )
+    _classList.forEach(cls => {element.classList.add(cls)});
+    element.innerHTML = _contentData
+    return element
+}
+//The same, but you can use several args for creating element's array
+function createNewElements() {
+    if(arguments.length == 0) return createNewElement('')
+    let args = arguments.length == 1 ? arguments[0] : [...arguments]
+    let resArr = [];
+    args.forEach(data => {
+        resArr.push(
+            createNewElement(data)
+        )
+    })
+    return resArr.length == 1 ? resArr[0] : resArr
+}
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!*************************!*\
+  !*** ./src/js/index.js ***!
+  \*************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _style_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../style/main.scss */ "./src/style/main.scss");
+/* harmony import */ var _js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/mylittlefw.js */ "./src/js/mylittlefw.js");
+
+
 
 let gameState = {
     soundOn: true,
@@ -154,7 +280,7 @@ createGameElement()
 
 //CREATE VISUAL
 function createGameElement() {
-    let gameDiv = createNewElement('.game-block')
+    let gameDiv = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.game-block')
     createButtonsBlock(gameDiv)
     createStateBlock(gameDiv)
     createMainBlock(gameDiv)
@@ -165,8 +291,8 @@ function createGameElement() {
 }
 
 function createEasyModeButton(_root) {
-    let text = createNewElement('p.text-to-rev=Эта кнопочка для тестирования, если ее активировать, рандом будет менее злой и можно будет легко и быстро собрать пазл.<br>З.Ы.: Все для удобства ревьювера!')
-    let button = createNewElement('button .up-button .easy-button =Easy mode (off)')
+    let text = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('p.text-to-rev=Эта кнопочка для тестирования, если ее активировать, рандом будет менее злой и можно будет легко и быстро собрать пазл.<br>З.Ы.: Все для удобства ревьювера!')
+    let button = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('button .up-button .easy-button =Easy mode (off)')
     _root.appendChild(text)
     button.onclick = () => {
         playButton()
@@ -178,8 +304,8 @@ function createEasyModeButton(_root) {
 }
 
 function createButtonsBlock(_root) {
-    let _buttonsRoot = createNewElement('.buttons-up-block')
-    let buttons = createNewElements(
+    let _buttonsRoot = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.buttons-up-block')
+    let buttons = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
         'button .up-button .start-button =Start',
         'button .up-button .stop-button =Stop',
         'button .up-button .save-button =Save',
@@ -192,14 +318,14 @@ function createButtonsBlock(_root) {
 }
 
 function createStateBlock(_root) {
-    let _stateBlock = createNewElement('.state-block')
-    let _movies = createNewElement('.movies-wrapper')
-    let _restart = createNewElement('a.restart-icon')
-    let _time = createNewElement('.time-wrapper')
-    createNewElements('.movies-tittle=Movies:', '.movies-count=0').forEach(el => {
+    let _stateBlock = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.state-block')
+    let _movies = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.movies-wrapper')
+    let _restart = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('a.restart-icon')
+    let _time = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.time-wrapper')
+    ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)('.movies-tittle=Movies:', '.movies-count=0').forEach(el => {
         _movies.appendChild(el)
     })
-    createNewElements('.time-tittle=Time:', '.time-count=00:00').forEach(el => {
+    ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)('.time-tittle=Time:', '.time-count=00:00').forEach(el => {
         _time.appendChild(el)
     })
     _stateBlock.appendChild(_movies)
@@ -210,8 +336,8 @@ function createStateBlock(_root) {
 }
 
 function createMainBlock(_root) {
-    let _game = createNewElement('.game-field')
-    let _gameWrapper = createNewElement('.game-field__wrapper')
+    let _game = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.game-field')
+    let _gameWrapper = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.game-field__wrapper')
     let bouns = []
     for(let i = 0; i < gameState.size; i++){
         for(let j = 0; j < gameState.size; j++) {
@@ -220,18 +346,18 @@ function createMainBlock(_root) {
             bouns.push(str)
         }
     }
-    createNewElements(bouns).forEach(elem => _game.appendChild(elem))
+    (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(bouns).forEach(elem => _game.appendChild(elem))
     _root.appendChild(_game)
 }
 
 function createSizeBlock(_root) {
-    let _size = createNewElement('.current-size=Frame size: 4x4')
+    let _size = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.current-size=Frame size: 4x4')
     _root.appendChild(_size)
 }
 
 function createOtherSizesBlock(_root) {
-    let _othSize = createNewElement('.other-size-wrapper')
-    let _content = createNewElements(
+    let _othSize = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.other-size-wrapper')
+    let _content = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
         '.other-size-title=Other sizes: ',
         'a.other-size-3=3x3',
         'a.other-size-4=4x4',
@@ -395,8 +521,8 @@ setInterval(() => {
 
 
 function showMessage(message) {
-    const modalWin = createNewElement(`.win-modal.hiding`)
-    const winMessage = createNewElement(`.win-message=${message}`)
+    const modalWin = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-modal.hiding`)
+    const winMessage = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-message=${message}`)
     modalWin.appendChild(winMessage)
     root.appendChild(modalWin)
     setTimeout(() => {modalWin.classList.remove('hiding')}, 10)
@@ -451,13 +577,13 @@ document.querySelector('.results-button').onclick = () => displayScore(root, get
 
 function displayScore(_root, getScore) {
     playButton()
-    const modalScore = createNewElement(`.win-modal.hiding`)
+    const modalScore = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-modal.hiding`)
     
-    const scoreDiv = createNewElement('.score-block')
-    const scoreWrapper = createNewElement('.score-block__wrapper')
+    const scoreDiv = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block')
+    const scoreWrapper = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__wrapper')
     let titleStr = `RESULT ${gameState.size}x${gameState.size}`
-    const scoreTitle = createNewElement('.score-block__title='+titleStr)
-    const scoreGrid = createNewElement('.score-block__grid')
+    const scoreTitle = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__title='+titleStr)
+    const scoreGrid = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__grid')
 
     createScoreGrid(scoreGrid, getScore)
     
@@ -478,7 +604,7 @@ function displayScore(_root, getScore) {
 }
 
 function createScoreGrid(_root, getScore) {
-    createNewElements(
+    (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
         '.grid-header',
         '.grid-header=DATE',
         '.grid-header=SIZE',
@@ -489,7 +615,7 @@ function createScoreGrid(_root, getScore) {
     localScore = localScore.sort((a, b) => a.time - b.time).filter(it => it.size == gameState.size).filter((_, i) => i < 10)
     localScore.forEach((scoreItem, i) => {
         const timeStr = makeTimeStr(scoreItem.time)
-        createNewElements(
+        ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
             `.grid-element=${i + 1}`,
             `.grid-element=${scoreItem.date}`,
             `.grid-element=${scoreItem.size}x${scoreItem.size}`,
@@ -643,3 +769,8 @@ document.querySelector('.restart-icon').onclick = () => {
     gameState.setNewGameArray()
     gameState.start(setRandomPosition)
 }
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=main.js.map
