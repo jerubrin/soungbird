@@ -353,7 +353,6 @@ setInterval(() => {
 
 
 function youWin(message) {
-    playVictory()
     const modalWin = createNewElement(`.win-modal.hiding`)
     const winMessage = createNewElement(`.win-message=${message}`)
     modalWin.appendChild(winMessage)
@@ -367,6 +366,8 @@ function isFinishedGame() {
     if(!gameState.isStarted) return
     const isFinish = getFinishedArray()
     if(isFinish) {
+        playVictory()
+        localStorage.removeItem('gameStr')
         youWin("YOU WIN!!!")
         addNewScore(createScore(gameState.size, gameState.movies, gameState.time))
         gameState.stop()
@@ -513,30 +514,70 @@ let curSwitch = true
 function playButton() {
     if(!gameState.soundOn) return
     soundButton.currentTime = 0
-    soundButton.play()
+    try{soundButton.play()}catch(e){return}
 }
 function playMessage() {
     if(!gameState.soundOn) return
-    soundButton.currentTime = 0
-    soundMessage.play()
+    soundMessage.currentTime = 0
+    try{soundMessage.play()}catch(e){return}
 }
 function playShufle() {
     if(!gameState.soundOn) return
     soundButton.currentTime = 0
-    soundShufle.play()
+    try{soundShufle.play()}catch(e){return}
 }
 function playSwitchIt() {
     if(!gameState.soundOn) return
-    curSwitch ? soundSwitch1.play() : soundSwitch2.play()
+    try{curSwitch ? soundSwitch1.play() : soundSwitch2.play()}catch(e){return}
     curSwitch = !curSwitch
 }
 function playVictory() {
     if(!gameState.soundOn) return
     soundButton.currentTime = 0
-    soundVictory.play()
+    try{soundVictory.play()}catch(e){return}
 }
 
 document.querySelector('.sound-button').onclick = function(e) {
     this.classList.toggle('sound-button_off')
     gameState.soundOn = !gameState.soundOn
 }
+
+//save func
+document.querySelector('.save-button').onclick = saveProgress
+function saveProgress() {
+    let gameStr = JSON.stringify(
+        {
+            soundOn: gameState.soundOn,
+            isFinished: gameState.isFinished,
+            movies: gameState.movies,
+            time: gameState.time,
+            size: gameState.size,
+            gameArray: JSON.stringify(gameState.gameArray),
+            zeroI: gameState.zeroI,
+            zeroJ: gameState.zeroJ,
+            isStarted: gameState.isStarted
+        })
+    localStorage.setItem("gameStr", gameStr)
+    youWin("Progress saved! It will load automaticly after loading game!")
+    playMessage()
+}
+
+function loadProgress() {
+    let res = localStorage.getItem("gameStr")
+    if(res) {
+        const newGameState = JSON.parse(res)
+        gameState.setSize (newGameState.size, refNewSize)
+        gameState.soundOn = newGameState.soundOn
+        gameState.isFinished = newGameState.isFinished
+        gameState.setMovies(newGameState.movies)
+        gameState.setTime(newGameState.time)
+        gameState.gameArray = JSON.parse(newGameState.gameArray)
+        gameState.zeroI = newGameState.zeroI
+        gameState.zeroJ = newGameState.zeroJ
+        if(newGameState.isStarted) gameState.start(() => {})
+        refreshCorrectBonsPosition()
+        refreshDrag()
+    }
+}
+
+loadProgress()
