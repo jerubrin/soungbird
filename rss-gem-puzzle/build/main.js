@@ -130,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 let gameState = {
     soundOn: true,
     easyMode: false,
-    movies: 0,
+    moves: 0,
     time: 0,
     isStarted: false,
     isFinished: true,
@@ -139,19 +139,19 @@ let gameState = {
     zeroI: 3,
     zeroJ: 3,
 
-    moviesNode: null,
+    movesNode: null,
     timeNode: null,
     sizeNode: null,
 
-    setFields(movies, time, size) {
-        this.moviesNode = movies
+    setFields(moves, time, size) {
+        this.movesNode = moves
         this.timeNode = time
         this.sizeNode = size
     },
 
-    setMovies(val) {
-        this.moviesNode.innerHTML = val
-        this.movies = val
+    setMoves(val) {
+        this.movesNode.innerHTML = val
+        this.moves = val
     },
     setTime(time) {
         this.time = time
@@ -166,7 +166,7 @@ let gameState = {
             this.setNewGameArray()
             setRandomPosition()
             this.setTime(0)
-            this.setMovies(0)
+            this.setMoves(0)
             this.isStarted = true
             this.isFinished = false
         } else {
@@ -186,7 +186,7 @@ let gameState = {
         this.zeroJ = size - 1
         this.stop()
         this.setTime(0)
-        this.setMovies(0)
+        this.setMoves(0)
         this.isFinished = true
         this.setNewGameArray()
         refNewSize()
@@ -220,7 +220,7 @@ let gameState = {
         this.gameArray[this.zeroI][this.zeroJ] = movingBone
         this.zeroI++
         this.gameArray[this.zeroI][this.zeroJ] = 0
-        if(gameState.isStarted) {this.setMovies(this.movies + 1)}
+        if(gameState.isStarted) {this.setMoves(this.moves + 1)}
         refreshCorrectBonsPosition()
         refreshDrag()
         return true
@@ -236,7 +236,7 @@ let gameState = {
         this.gameArray[this.zeroI][this.zeroJ] = movingBone
         this.zeroI--
         this.gameArray[this.zeroI][this.zeroJ] = 0
-        if(gameState.isStarted) {this.setMovies(this.movies + 1)}
+        if(gameState.isStarted) {this.setMoves(this.moves + 1)}
         refreshCorrectBonsPosition()
         refreshDrag()
         return true
@@ -252,7 +252,7 @@ let gameState = {
         this.gameArray[this.zeroI][this.zeroJ] = movingBone
         this.zeroJ++
         this.gameArray[this.zeroI][this.zeroJ] = 0
-        if(gameState.isStarted) {this.setMovies(this.movies + 1)}
+        if(gameState.isStarted) {this.setMoves(this.moves + 1)}
         refreshCorrectBonsPosition()
         refreshDrag()
         return true
@@ -268,7 +268,7 @@ let gameState = {
         this.gameArray[this.zeroI][this.zeroJ] = movingBone
         this.zeroJ--
         this.gameArray[this.zeroI][this.zeroJ] = 0
-        if(gameState.isStarted) {this.setMovies(this.movies + 1)}
+        if(gameState.isStarted) {this.setMoves(this.moves + 1)}
         refreshCorrectBonsPosition()
         refreshDrag()
         return true
@@ -321,16 +321,16 @@ function createButtonsBlock(_root) {
 
 function createStateBlock(_root) {
     let _stateBlock = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.state-block')
-    let _movies = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.movies-wrapper')
+    let _moves = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.moves-wrapper')
     let _restart = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('a.restart-icon')
     let _time = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.time-wrapper')
-    ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)('.movies-tittle=Movies:', '.movies-count=0').forEach(el => {
-        _movies.appendChild(el)
+    ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)('.moves-tittle=Moves:', '.moves-count=0').forEach(el => {
+        _moves.appendChild(el)
     })
     ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)('.time-tittle=Time:', '.time-count=00:00').forEach(el => {
         _time.appendChild(el)
     })
-    _stateBlock.appendChild(_movies)
+    _stateBlock.appendChild(_moves)
     _stateBlock.appendChild(_restart)
     _stateBlock.appendChild(_time)
 
@@ -373,7 +373,7 @@ function createOtherSizesBlock(_root) {
 }
 
 gameState.setFields(
-    document.querySelector('.movies-count'),
+    document.querySelector('.moves-count'),
     document.querySelector('.time-count'),
     document.querySelector('.current-size')
 )
@@ -508,6 +508,7 @@ function setRandomPosition(){
         if(rngDirection === 4) gameState.moveRight(refreshCorrectBonsPosition, true)
     }
     if(getFinishedArray()) {setRandomPosition()}
+    checkGameArray()
 }
 document.querySelector('.start-button').onclick = () => gameState.start(setRandomPosition)
 document.querySelector('.stop-button').onclick = () => gameState.stop()
@@ -538,9 +539,9 @@ function isFinishedGame() {
     if(isFinish) {
         playVictory()
         localStorage.removeItem('gameStr')
-        const winStr = `Hooray! You solved the puzzle in ${makeTimeStr(gameState.time)} and ${gameState.movies} moves!`
+        const winStr = `Hooray! You solved the puzzle in ${makeTimeStr(gameState.time)} and ${gameState.moves} moves!`
         showMessage(winStr)
-        addNewScore(createScore(gameState.size, gameState.movies, gameState.time))
+        addNewScore(createScore(gameState.size, gameState.moves, gameState.time))
         gameState.isFinished = true
         gameState.stop()
         //TODO: save results
@@ -554,12 +555,12 @@ function getFinishedArray() {
 
 //SCORE
 // let score = getScore()
-function createScore(size, movies, time) {
+function createScore(size, moves, time) {
     const date = new Date()
     return {
         date: date.toLocaleDateString() + ' ' + date.toLocaleTimeString(),
         size: size, 
-        movies: movies,
+        moves: moves,
         time: time,
     }
 }
@@ -611,7 +612,7 @@ function createScoreGrid(_root, getScore) {
         '.grid-header=DATE',
         '.grid-header=SIZE',
         '.grid-header=TIME',
-        '.grid-header=MOVIES',
+        '.grid-header=MOVES',
     ).forEach(header => _root.appendChild(header))
     let localScore = getScore()
     localScore = localScore.sort((a, b) => a.time - b.time).filter(it => it.size == gameState.size).filter((_, i) => i < 10)
@@ -622,7 +623,7 @@ function createScoreGrid(_root, getScore) {
             `.grid-element=${scoreItem.date}`,
             `.grid-element=${scoreItem.size}x${scoreItem.size}`,
             `.grid-element=${timeStr}`,
-            `.grid-element=${scoreItem.movies}`,
+            `.grid-element=${scoreItem.moves}`,
         ).forEach(elem => _root.appendChild(elem))
     })
 }
@@ -727,7 +728,7 @@ function saveProgress() {
         {
             soundOn: gameState.soundOn,
             isFinished: gameState.isFinished,
-            movies: gameState.movies,
+            moves: gameState.moves,
             time: gameState.time,
             size: gameState.size,
             gameArray: JSON.stringify(gameState.gameArray),
@@ -747,7 +748,7 @@ function loadProgress() {
         gameState.setSize (newGameState.size, refNewSize)
         gameState.soundOn = newGameState.soundOn
         gameState.isFinished = newGameState.isFinished
-        gameState.setMovies(newGameState.movies)
+        gameState.setMoves(newGameState.moves)
         gameState.setTime(newGameState.time)
         gameState.gameArray = JSON.parse(newGameState.gameArray)
         gameState.zeroI = newGameState.zeroI
@@ -779,6 +780,22 @@ function blureGame(isBlure) {
         elem.classList.add('game-field__blure') :
         elem.classList.remove('game-field__blure')
     })
+}
+
+//TEST
+document.querySelector('.moves-tittle').onclick = checkGameArray
+function checkGameArray() {
+    let arr = gameState.gameArray;
+    
+    let number = arr.flat().map((it, i, a) => {
+        let sum = 0
+        for(let j = i; j < a.length; j++) {
+            if(it > a[j] && a[j] != 0) sum++
+        }
+        return sum
+    }).reduce((w, c) => w + c, 0)
+    console.log(number)
+    console.log(number % 2 ? 'wrong' : 'correct')
 }
 })();
 
