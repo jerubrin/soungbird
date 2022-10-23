@@ -138,6 +138,7 @@ let gameState = {
     size: 4,
     zeroI: 3,
     zeroJ: 3,
+    temporaryPause: false,
 
     movesNode: null,
     timeNode: null,
@@ -159,6 +160,7 @@ let gameState = {
         this.timeNode.innerHTML = str
     },
     start(setRandomPosition) {
+        document.querySelector('.start-button').textContent = 'start'
         blureGame(false)
         playButton()
         console.log(gameState)
@@ -168,15 +170,20 @@ let gameState = {
             this.setTime(0)
             this.setMoves(0)
             this.isStarted = true
+            this.temporaryPause = false
             this.isFinished = false
         } else {
             this.isStarted = true
+            this.temporaryPause = false
         }
     },
     stop() {
         playButton()
         this.isStarted = false
-        if(!this.isFinished) blureGame(true)
+        if(!this.isFinished) {
+            blureGame(true)
+            document.querySelector('.start-button').textContent = 'resume'
+        }
     },
     setSize(size, refNewSize) {
         playButton()
@@ -189,6 +196,7 @@ let gameState = {
         this.setMoves(0)
         this.isFinished = true
         this.setNewGameArray()
+        document.querySelector('.start-button').textContent = 'start'
         refNewSize()
     },
     setNewGameArray() {
@@ -309,8 +317,8 @@ function createButtonsBlock(_root) {
     let _buttonsRoot = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.buttons-up-block')
     let buttons = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
         'button .up-button .start-button =Start',
-        'button .up-button .stop-button =Stop',
-        'button .up-button .save-button =Save',
+        'button .up-button .stop-button =Pause',
+        'button .up-button .save-button =Saves',
         'button .up-button .results-button =Result',
         'button .up-button .sound-button'
     )
@@ -508,29 +516,61 @@ function setRandomPosition(){
         if(rngDirection === 4) gameState.moveRight(refreshCorrectBonsPosition, true)
     }
     if(getFinishedArray()) {setRandomPosition()}
-    checkGameArray()
 }
 document.querySelector('.start-button').onclick = () => gameState.start(setRandomPosition)
 document.querySelector('.stop-button').onclick = () => gameState.stop()
-// document.querySelector('.save-button').onclick //TODO
 
 //TIMERs
 setInterval(() => {
-    if(gameState.isStarted) {
+    if(gameState.isStarted && !gameState.temporaryPause) {
         gameState.setTime(gameState.time + 1)
     }
 }, 1000)
 
 
 
-function showMessage(message) {
+function showMessage(message, hideBack = false) {
+    gameState.temporaryPause = true
     const modalWin = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-modal.hiding`)
+    if(hideBack) modalWin.classList.add('win-modal_clear')
     const winMessage = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-message=${message}`)
     modalWin.appendChild(winMessage)
     root.appendChild(modalWin)
     setTimeout(() => {modalWin.classList.remove('hiding')}, 10)
     setTimeout(() => {modalWin.classList.add('hiding')}, 3000)
-    setTimeout(() => {root.removeChild(modalWin)}, 3600)
+    setTimeout(() => {
+        root.removeChild(modalWin)
+        if(!hideBack) gameState.temporaryPause = false
+    }, 3600)
+}
+function showDialogMessage(message, fun, hideBack = false) {
+    gameState.temporaryPause = true
+    const modalWin = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-modal.hiding`)
+    if(hideBack) modalWin.classList.add('win-modal_clear')
+    const winMessage = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-message=${message}`)
+
+    const btnContainer = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.win-buttons')
+    const btnConfirm = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('button.win-button.up-button=yes')
+    btnConfirm.onclick = () => {hide(fun)}
+    const btnCancel = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('button.win-button.up-button=no')
+    btnCancel.onclick = hide
+
+    btnContainer.append(btnCancel, btnConfirm)
+    winMessage.appendChild(btnContainer)
+
+    modalWin.appendChild(winMessage)
+    root.appendChild(modalWin)
+    setTimeout(() => {modalWin.classList.remove('hiding')}, 10)
+
+    function hide(fun) {
+        playButton()
+        modalWin.classList.add('hiding')
+        setTimeout(() => {
+            root.removeChild(modalWin)
+            if(fun) fun()
+            if(!hideBack) gameState.temporaryPause = false
+        }, 600)
+    }
 }
 
 function isFinishedGame() {
@@ -544,7 +584,6 @@ function isFinishedGame() {
         addNewScore(createScore(gameState.size, gameState.moves, gameState.time))
         gameState.isFinished = true
         gameState.stop()
-        //TODO: save results
     }
 }
 
@@ -579,6 +618,10 @@ function addNewScore(newScore) {
 document.querySelector('.results-button').onclick = () => displayScore(root, getScore)
 
 function displayScore(_root, getScore) {
+    if(!gameState.isFinished) {
+        blureGame(true)
+        gameState.temporaryPause = true
+    }
     playButton()
     const modalScore = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-modal.hiding`)
     
@@ -599,9 +642,14 @@ function displayScore(_root, getScore) {
 
     //close score
     modalScore.onclick = (e) => {
+        playButton()
         if(e.srcElement == modalScore) {
             setTimeout(() => {modalScore.classList.add('hiding')}, 30)
-            setTimeout(() => {root.removeChild(modalScore)}, 630)
+            setTimeout(() => {
+                root.removeChild(modalScore)
+                if(gameState.isStarted && !gameState.isFinished) blureGame(false)
+                gameState.temporaryPause = false
+            }, 430)
         }
     }
 }
@@ -719,11 +767,123 @@ function playVictory() {
 document.querySelector('.sound-button').onclick = function(e) {
     this.classList.toggle('sound-button_off')
     gameState.soundOn = !gameState.soundOn
+    playButton()
+    localStorage.setItem('soundOn', gameState.soundOn)
 }
+console.log(localStorage.getItem('soundOn'))
+gameState.soundOn = localStorage.getItem('soundOn') == 'true'
+if(!gameState.soundOn) document.querySelector('.sound-button').classList.toggle('sound-button_off')
 
 //save func
-document.querySelector('.save-button').onclick = saveProgress
-function saveProgress() {
+document.querySelector('.save-button').onclick = savePopup
+
+function savePopup() {
+    playButton()
+    if(!gameState.isFinished) {
+        blureGame(true)
+        gameState.temporaryPause = true
+    }
+    const _popup = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.saves-block')
+    const _popupWrapper = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.saves-block__wrapper')
+    const _popupTitle = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.saves-block__title=saves')
+    
+    const _popupSlotWrapper = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.slots')
+    createSlots(_popupSlotWrapper)
+    const _popupClose = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.saves-block__close')
+
+    _popupWrapper.appendChild(_popupClose)
+    _popupWrapper.appendChild(_popupTitle)
+    _popupWrapper.appendChild(_popupSlotWrapper)
+    _popup.appendChild(_popupWrapper)
+    _popup.onclick = (e) => {if(e.target == _popup) closeWindow(_popup)}
+    _popupClose.onclick = () => {closeWindow(_popup)}
+    root.append(_popup)
+}
+function closeWindow(win) {
+    if(gameState.isStarted && !gameState.isFinished) blureGame(false)
+    gameState.temporaryPause = false
+    root.removeChild(win)
+}
+function createSlots(wrapper) {
+    for(let num = 0; num < 4; num++) {
+        const _slot = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.slots__slot')
+        let dataLS = localStorage.getItem("gameStr_"+num)
+        if(dataLS) {
+            let data = JSON.parse(dataLS)
+            const _date = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.slots__date='
+                +data.date.split('').filter(ch => ch != ',').join('')
+                )
+            const _miniGrid = createMiniGrid(JSON.parse(data.gameArray))
+            const _size = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.slots__size=${data.size}x${data.size}`)
+            const _buttons = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.slots__buttons')
+            const _removeBtn = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('button.slots__remove')
+            const _resaveBtn = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('button.slots__resave')
+            _buttons.append(_removeBtn, _resaveBtn)
+            _slot.append(_date, _miniGrid, _size, _buttons)
+            _slot.onclick = (e) => {
+                playButton()
+                if (e.target == _removeBtn) {
+                    removeSlot(num, wrapper, createSlots);
+                    return
+                }
+                if (e.target == _resaveBtn) {
+                    resaveToSlot(num, wrapper, createSlots);
+                    return
+                }
+                loadProgress(num)
+            }
+        } else {
+            const _empty = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.slots__empty=empty')
+            _slot.classList.add('slots__slot_empty')
+            _slot.appendChild(_empty)
+            _slot.onclick = () => {playButton(); saveToSlot(num); rerender(wrapper, createSlots)}
+        }
+        wrapper.appendChild(_slot)
+    }
+}
+//qwerty
+savePopup()
+function createMiniGrid(arr) {
+    const _grid = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.mini-grid.mini-grid_size_'+arr.length)
+    console.log(arr)
+
+    for(let i = 0; i < arr.length; i++){
+        for(let j = 0; j < arr[i].length; j++) {
+            const _item = arr[i][j] != 0 ? 
+                (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.mini-grid__item='+(arr[i][j])) :
+                (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.mini-grid__item_none')
+            _grid.append(_item)
+        }
+    }
+
+    return _grid
+}
+function rerender(wrapper, func) {
+    console.log(wrapper)
+    wrapper.innerHTML = ''
+    func(wrapper)
+}
+function removeSlot(num, wrapper, func) {
+    showDialogMessage(
+        'Are you realy want to delete this save?', 
+        () => {
+            localStorage.removeItem("gameStr_"+num)
+            rerender(wrapper, func)
+        },
+        true
+    )
+}
+function resaveToSlot(num, wrapper, func) {
+    showDialogMessage(
+        'Are you want to rewrite this slot with current game?', 
+        () => {
+            saveToSlot(num)
+            rerender(wrapper, func)
+        },
+        true
+    )
+}
+function saveToSlot(num) {
     let gameStr = JSON.stringify(
         {
             soundOn: gameState.soundOn,
@@ -734,15 +894,17 @@ function saveProgress() {
             gameArray: JSON.stringify(gameState.gameArray),
             zeroI: gameState.zeroI,
             zeroJ: gameState.zeroJ,
-            isStarted: gameState.isStarted
-        })
-    localStorage.setItem("gameStr", gameStr)
-    showMessage("Progress saved! It will load automaticly after loading game! (only if you don't complete the puzzle)")
+            isStarted: gameState.isStarted,
+            date: new Date().toLocaleString()
+        }
+    )
+    localStorage.setItem("gameStr_"+num, gameStr)
+    showMessage(`Progress saved to slot #${num+1}!`, true)
     playMessage()
 }
 
-function loadProgress() {
-    let res = localStorage.getItem("gameStr")
+function loadProgress(num) {
+    let res = localStorage.getItem("gameStr_"+num)
     if(res) {
         const newGameState = JSON.parse(res)
         gameState.setSize (newGameState.size, refNewSize)
@@ -756,14 +918,13 @@ function loadProgress() {
         if(newGameState.isStarted) gameState.start(() => {})
         refreshCorrectBonsPosition()
         refreshDrag()
-
+        closeWindow(root.children[1])
         showMessage("Game progress has been loading...")
         playMessage()
     }
 }
 
 setRandomPosition()
-loadProgress()
 
 //Restart
 document.querySelector('.restart-icon').onclick = () => {
@@ -780,22 +941,6 @@ function blureGame(isBlure) {
         elem.classList.add('game-field__blure') :
         elem.classList.remove('game-field__blure')
     })
-}
-
-//TEST
-document.querySelector('.moves-tittle').onclick = checkGameArray
-function checkGameArray() {
-    let arr = gameState.gameArray;
-    
-    let number = arr.flat().map((it, i, a) => {
-        let sum = 0
-        for(let j = i; j < a.length; j++) {
-            if(it > a[j] && a[j] != 0) sum++
-        }
-        return sum
-    }).reduce((w, c) => w + c, 0)
-    console.log(number)
-    console.log(number % 2 ? 'wrong' : 'correct')
 }
 })();
 
