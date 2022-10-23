@@ -37,7 +37,6 @@ let gameState = {
         document.querySelector('.start-button').textContent = 'start'
         blureGame(false)
         playButton()
-        console.log(gameState)
         if (this.isFinished) {
             this.setNewGameArray()
             setRandomPosition()
@@ -574,7 +573,6 @@ function refreshDrag() {
     
     zero.ondrop = drop
     function drop(e) {
-        console.log('DROP:', dropMove)
         if(dropMove === 1) {gameState.moveDown(refreshCorrectBonsPosition)}
         if(dropMove === 2) {gameState.moveUp(refreshCorrectBonsPosition)}
         if(dropMove === 3) {gameState.moveRight(refreshCorrectBonsPosition)}
@@ -644,7 +642,6 @@ document.querySelector('.sound-button').onclick = function(e) {
     playButton()
     localStorage.setItem('soundOn', gameState.soundOn)
 }
-console.log(localStorage.getItem('soundOn'))
 gameState.soundOn = localStorage.getItem('soundOn') == 'true'
 if(!gameState.soundOn) document.querySelector('.sound-button').classList.toggle('sound-button_off')
 
@@ -715,12 +712,8 @@ function createSlots(wrapper) {
         wrapper.appendChild(_slot)
     }
 }
-//qwerty
-savePopup()
 function createMiniGrid(arr) {
     const _grid = createNewElement('.mini-grid.mini-grid_size_'+arr.length)
-    console.log(arr)
-
     for(let i = 0; i < arr.length; i++){
         for(let j = 0; j < arr[i].length; j++) {
             const _item = arr[i][j] != 0 ? 
@@ -733,7 +726,6 @@ function createMiniGrid(arr) {
     return _grid
 }
 function rerender(wrapper, func) {
-    console.log(wrapper)
     wrapper.innerHTML = ''
     func(wrapper)
 }
