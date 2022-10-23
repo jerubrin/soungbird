@@ -506,7 +506,7 @@ refreshCorrectBonsPosition()
 function setRandomPosition(){
     playShufle()
     const rndSteps = gameState.easyMode ? 6 //RANDOM TEST
-        : Math.trunc(Math.random()*50+50) * gameState.size
+        : Math.trunc(Math.random()*100+200) * gameState.size
     for(let k = 0; k < rndSteps; k++){
         const rngDirection = Math.trunc(Math.random()*4+1)
         if(rngDirection === 1) gameState.moveUp(refreshCorrectBonsPosition, true)
@@ -614,9 +614,9 @@ function addNewScore(newScore) {
     localStorage.setItem('score', JSON.stringify(score))
 }
 
-document.querySelector('.results-button').onclick = () => displayScore(root, getScore)
+document.querySelector('.results-button').onclick = () => displayScore(getScore, gameState.size)
 
-function displayScore(_root, getScore) {
+function displayScore(getScore, curSize) {
     if(!gameState.isFinished) {
         blureGame(true)
         gameState.temporaryPause = true
@@ -625,24 +625,42 @@ function displayScore(_root, getScore) {
     const modalScore = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`.win-modal.hiding`)
     
     const scoreDiv = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block')
+    const scoreClose = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__close')
+    scoreClose.onclick = closeScore
     const scoreWrapper = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__wrapper')
-    let titleStr = `RESULT ${gameState.size}x${gameState.size}`
+    let titleStr = `RESULT ${curSize}x${curSize}`
     const scoreTitle = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__title='+titleStr)
     const scoreGrid = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__grid')
+    const scoreLinks = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('.score-block__links')
+    for(let i = 3; i <= 8; i++) {
+        const scoreLink = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)(`a.score-block__link=${i}x${i}`)
+        if(curSize == i) {
+            scoreLink.classList.add('score-block__link_active')
+        } else {
+            scoreLink.onclick = () => {
+                root.removeChild(modalScore)
+                displayScore(getScore, i)
+            }
+        }
+        scoreLinks.appendChild(scoreLink)
+    }
 
-    createScoreGrid(scoreGrid, getScore)
+    createScoreGrid(scoreGrid, getScore, curSize)
     
+    scoreDiv.appendChild(scoreClose)
     scoreDiv.appendChild(scoreTitle)
     scoreWrapper.appendChild(scoreGrid)
     scoreDiv.appendChild(scoreWrapper)
+    scoreDiv.appendChild(scoreLinks)
     modalScore.appendChild(scoreDiv)
     root.appendChild(modalScore)
     setTimeout(() => {modalScore.classList.remove('hiding')}, 10)
 
     //close score
-    modalScore.onclick = (e) => {
+    modalScore.onclick = closeScore
+    function closeScore(e) {
         playButton()
-        if(e.srcElement == modalScore) {
+        if(e.srcElement == modalScore || e.srcElement == scoreClose) {
             setTimeout(() => {modalScore.classList.add('hiding')}, 30)
             setTimeout(() => {
                 root.removeChild(modalScore)
@@ -653,7 +671,7 @@ function displayScore(_root, getScore) {
     }
 }
 
-function createScoreGrid(_root, getScore) {
+function createScoreGrid(_root, getScore, curSize) {
     (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
         '.grid-header',
         '.grid-header=DATE',
@@ -662,7 +680,7 @@ function createScoreGrid(_root, getScore) {
         '.grid-header=MOVES',
     ).forEach(header => _root.appendChild(header))
     let localScore = getScore()
-    localScore = localScore.sort((a, b) => a.time - b.time).filter(it => it.size == gameState.size).filter((_, i) => i < 10)
+    localScore = localScore.sort((a, b) => a.time - b.time).filter(it => it.size == curSize).filter((_, i) => i < 10)
     localScore.forEach((scoreItem, i) => {
         const timeStr = makeTimeStr(scoreItem.time)
         ;(0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElements)(
@@ -799,6 +817,7 @@ function savePopup() {
 function closeWindow(win) {
     if(gameState.isStarted && !gameState.isFinished) blureGame(false)
     gameState.temporaryPause = false
+    playButton()
     root.removeChild(win)
 }
 function createSlots(wrapper) {
