@@ -230,15 +230,32 @@ body {
 }
 @media screen and (min-width: 1280px) {
   .state-block {
-    justify-content: space-around;
+    padding: 0 32px;
     font-size: 23px;
   }
 }
 .state-block .moves-wrapper {
   display: flex;
+  max-width: 180px;
+  width: 170px;
+}
+@media screen and (max-width: 480px) {
+  .state-block .moves-wrapper {
+    max-width: 120px;
+    width: 120px;
+  }
 }
 .state-block .time-wrapper {
   display: flex;
+  max-width: 180px;
+  width: 170px;
+  justify-content: flex-end;
+}
+@media screen and (max-width: 480px) {
+  .state-block .time-wrapper {
+    max-width: 120px;
+    width: 120px;
+  }
 }
 .state-block .restart-icon {
   width: 30px;
@@ -466,6 +483,35 @@ body {
   background-color: #72a3eb;
   color: #04098e;
 }
+.score-block__close {
+  display: absolute;
+  width: 30px;
+  height: 30px;
+  background: url(9381e0cdafa6edcc9f00.svg) center no-repeat;
+  background-size: 60%;
+  margin: -12px -10px 0 auto;
+  cursor: pointer;
+}
+.score-block__links {
+  text-align: center;
+  margin-top: 14px;
+}
+.score-block__link {
+  font-size: 1.2rem;
+  margin: 4px;
+  color: #04098e;
+  cursor: pointer;
+}
+.score-block__link:hover {
+  text-decoration: underline;
+}
+.score-block__link_active {
+  font-weight: 900;
+  cursor: auto;
+}
+.score-block__link_active:hover {
+  text-decoration: none;
+}
 
 [draggable=true] {
   user-select: none;
@@ -485,7 +531,8 @@ body {
 }
 .saves-block__wrapper {
   width: 500px;
-  background: #72a3eb;
+  max-width: 90vw;
+  background-color: #e1ebf6;
   margin: auto;
   padding: 24px;
   border: 2px solid #04098e;
@@ -501,13 +548,23 @@ body {
   font-size: 2.8rem;
   padding-bottom: 24px;
   text-transform: uppercase;
-  color: #1d3560;
+  color: #04098e;
 }
 @media screen and (max-width: 768px) {
   .saves-block__title {
     font-size: 2.2rem;
   }
 }
+.saves-block__close {
+  display: absolute;
+  width: 30px;
+  height: 30px;
+  background: url(9381e0cdafa6edcc9f00.svg) center no-repeat;
+  background-size: 60%;
+  margin: -15px -10px 0 auto;
+  cursor: pointer;
+}
+
 .slots {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -529,8 +586,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #6468d1;
-  border: 2px solid #151529;
+  background: #72a3eb;
+  border: 2px solid #04098e;
   border-radius: 15px;
   overflow: hidden;
   transition: all 0.4s;
