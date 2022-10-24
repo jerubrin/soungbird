@@ -170,6 +170,7 @@ function createGameElement() {
     createSizeBlock(gameDiv)
     createOtherSizesBlock(gameDiv)
     createEasyModeButton(gameDiv)
+    createAutofillButton(gameDiv)
     root.appendChild(gameDiv)
 }
 
@@ -182,6 +183,17 @@ function createEasyModeButton(_root) {
         button.classList.toggle('easy-button_active')
         gameState.easyMode = !gameState.easyMode
         button.textContent = `Easy mode (${gameState.easyMode ? 'on' : 'off'})`
+    }
+    _root.appendChild(button)
+}
+
+function createAutofillButton(_root) {
+    let text = createNewElement('p.text-to-rev=Ну и бонусом автосборщик, чтобы пазл точно собрался ;)')
+    let button = createNewElement('button .up-button .easy-button =Auto-solution')
+    _root.appendChild(text)
+    button.onclick = () => {
+        playButton()
+        solution()
     }
     _root.appendChild(button)
 }
@@ -412,7 +424,7 @@ function showMessage(message, hideBack = false) {
     setTimeout(() => {modalWin.classList.remove('hiding')}, 10)
     setTimeout(() => {modalWin.classList.add('hiding')}, 3000)
     setTimeout(() => {
-        root.removeChild(modalWin)
+        if(modalWin) root.removeChild(modalWin)
         if(!hideBack) gameState.temporaryPause = false
     }, 3600)
 }
@@ -692,7 +704,7 @@ function closeWindow(win) {
     if(gameState.isStarted && !gameState.isFinished) blureGame(false)
     gameState.temporaryPause = false
     playButton()
-    root.removeChild(win)
+    if(win) root.removeChild(win)
 }
 function createSlots(wrapper) {
     for(let num = 0; num < 4; num++) {
@@ -826,4 +838,442 @@ function blureGame(isBlure) {
         elem.classList.add('game-field__blure') :
         elem.classList.remove('game-field__blure')
     })
+}
+
+//solution
+const TOP = 'top'
+const BOTTOM = 'bottom'
+const LEFT = 'left'
+const RIGHT = 'right'
+
+const GAP_TOP = 1
+const GAP_BOTTOM = 2
+const GAP_LEFT = 3
+const GAP_RIGHT = 4
+
+let flatArr = []
+let hasSteps = true
+let countsIsFinish = false
+let actions = []
+let actionsLocal = []
+let arr = []
+let finalArr = []
+//loadProgress(0)
+
+// solution()
+function solution() {
+    countsIsFinish = false
+    solStart()
+}
+var interval = setInterval(() => {
+    if(!gameState.isStarted) actions = []
+    if(countsIsFinish && gameState.isStarted) nextStep()
+    //if(!hasSteps) clearInterval(interval);
+}, 80);
+function nextStep() {
+    let comand = actions.shift()
+    if(comand == LEFT) gameState.moveLeft(refreshCorrectBonsPosition)
+    if(comand == RIGHT) gameState.moveRight(refreshCorrectBonsPosition)
+    if(comand == TOP) gameState.moveUp(refreshCorrectBonsPosition)
+    if(comand == BOTTOM) gameState.moveDown(refreshCorrectBonsPosition)
+    if(actions.length <= 0) hasSteps = false;
+}
+document.querySelector('.moves-tittle').onclick = () => {solStartMini; _cursor++}
+let _cursor = 0
+function solStartMini() {
+    console.log(_cursor)
+    if(_cursor == 0) {
+        arr = JSON.parse(JSON.stringify(gameState.gameArray)) 
+        createRightPositions(gameState.size)
+    }
+    try{
+        console.log(`>>>>> flatArr[${_cursor}]=${flatArr[_cursor].tile} <<<<<`)
+        const obj = flatArr[_cursor]
+        let [cI, cJ] = findTile(obj.tile)
+        let [nI, nJ] = findTile(flatArr[_cursor+1].tile)
+        let [_I, _J] = findGap()
+        if(obj.$I == cI && obj.$J == cJ) {
+            console.log('NICEEEE!!!')
+        } else if(finalArr[cI][cJ] == arr[cI][cJ]
+               && finalArr[nI][nJ] == arr[nI][nJ]
+               && ((cI == arr.length - 1) || (cJ == arr.length - 1))
+                ) {
+            console.log('DOUBLE NICEEEE!!!')
+            _cursor++
+        } else {
+            if(obj.dir == 0) {
+                moveGapHoleHor(_J - cJ) //A 1 b
+                moveGapHoleVer(_I - cI) //A 1 a
+                moveToVer(obj) // A 2 a
+                moveToHor(obj) // A 2 b
+                moveToTop(1, obj)
+                makeSteps();
+            }
+            if(obj.dir == 1) {
+                moveGapHoleVer(_I - cI) //A 1 a
+                moveGapHoleHor(_J - cJ) //A 1 b
+                moveToHor(obj) // A 2 a
+                moveToVer(obj) // A 2 b
+                moveToLeft(1, obj)
+                makeSteps();
+            }
+            makeSteps();
+        }
+        console.log(`${flatArr[_cursor + 1].tile} == ${arr[obj.$I][obj.$J+1]}`)
+        if(obj.$J == arr.length - 2 && 
+            flatArr[_cursor + 1].tile == arr[obj.$I][obj.$J+1]
+        ) {
+            console.log("newActive horizontal")
+            let aJ = arr.length - 2
+            let aI = flatArr[_cursor + 1].$I + 1
+            let [_I, _J] = findGap()
+            moveGapHoleHor(_J - aJ)
+            moveGapHoleVer(_I - aI)
+            let newActive = [LEFT,BOTTOM,RIGHT,TOP,TOP,LEFT,BOTTOM,RIGHT,BOTTOM,LEFT,TOP]
+            actions = actions.concat(newActive)
+            actionsLocal = actionsLocal.concat(newActive)
+            makeSteps();
+        }
+        
+        console.log(`${flatArr[_cursor + 1].tile} == ${arr[obj.$I+1][obj.$J]}`)
+        if(obj.$I == arr.length - 2 && 
+            flatArr[_cursor + 1].tile == arr[obj.$I+1][obj.$J]
+        ) {
+            console.log("newActive vertical")
+            let newActive = [TOP,RIGHT,BOTTOM,LEFT,LEFT,TOP,RIGHT,BOTTOM,RIGHT,TOP,LEFT]
+            actions = actions.concat(newActive)
+            actionsLocal = actionsLocal.concat(newActive)
+            makeSteps();
+        }
+        countsIsFinish = true
+    } catch(e) {
+        console.error(e.message)
+    }
+}
+function solStart() {
+    //перебор массива правильных позиций в порядке сбора
+    //qwerty
+    for(_cursor = 0; _cursor < flatArr.length - 3 || _cursor == 0; _cursor++){
+        solStartMini()
+    }
+    finalSteps()
+    countsIsFinish = true
+}
+document.querySelector('.time-tittle').onclick = () => finalSteps()
+function finalSteps() {
+    let size = gameState.size
+    let saveCout = 0
+    while(saveCout != 20) {
+        let comand = ''
+        if(arr[size-2][size-2] == 0) comand = LEFT
+        if(arr[size-2][size-1] == 0) comand = TOP
+        if(arr[size-1][size-2] == 0) comand = BOTTOM
+        if(arr[size-1][size-1] == 0) comand = RIGHT
+        if(comand != '') {
+            actionsLocal.push(comand)
+            actions.push(comand)
+            makeSteps()
+        }
+        if( (arr[size-2][size-2] == size * size - size - 1) &&
+            (arr[size-2][size-1] == size * size - size) &&
+            (arr[size-1][size-2] == size * size - 1) &&
+            (arr[size-1][size-1] == 0)
+        ) {
+            console.log("HORAY!!!")
+            break
+        }
+        saveCout++
+    }
+}
+function makeSteps() { //In local Array
+    while(actionsLocal.length > 0) {
+        let [_I, _J] = findGap()
+        let comand = actionsLocal.shift()
+        if(comand == TOP) {
+            if(_I >= arr.length - 1) throw new Error('Выход за пределы игрового поля: ' + TOP)
+            arr[_I][_J] = arr[_I+1][_J]
+            arr[_I+1][_J] = 0
+        }
+        if(comand == BOTTOM) {
+            if(_I <= 0) throw new Error(`Выход за пределы игрового поля _I=${_I} <= : ` + BOTTOM)
+            arr[_I][_J] = arr[_I-1][_J]
+            arr[_I-1][_J] = 0
+        }
+        if(comand == LEFT) {
+            if(_J > arr.length) throw new Error('Выход за пределы игрового поля: ' + RIGHT)
+            arr[_I][_J] = arr[_I][_J+1]
+            arr[_I][_J+1] = 0
+        }
+        if(comand == RIGHT) {
+            if(_J <= 0) throw new Error('Выход за пределы игрового поля: ' + LEFT)
+            arr[_I][_J] = arr[_I][_J-1]
+            arr[_I][_J-1] = 0
+        }
+    }
+}
+//SOL MOVED
+function moveGapHoleVer(steps) {
+    if(steps < 0) {
+        for(let i = 0; i < Math.abs(steps); i++) {
+            actions.push(TOP)
+            actionsLocal.push(TOP)
+        }
+    }
+    if(steps > 0) {
+        for(let i = 0; i < Math.abs(steps); i++) {
+            actions.push(BOTTOM)
+            actionsLocal.push(BOTTOM)
+        }
+    }
+    makeSteps()
+}
+function moveGapHoleHor(steps) {
+    if(steps < 0) {
+        for(let i = 0; i < Math.abs(steps); i++) {
+            actions.push(LEFT)
+            actionsLocal.push(LEFT)
+        }
+    }
+    if(steps > 0) {
+        for(let i = 0; i < Math.abs(steps); i++) {
+            actions.push(RIGHT)
+            actionsLocal.push(RIGHT)
+        }
+    }
+    makeSteps()
+}
+//Horizont
+function moveToVer(obj) {
+    let [cI, cJ] = findTile(obj.tile)
+    let [_I, _J] = findGap()
+    let dir = obj.dir
+    let $I = dir == 0 ? obj.$I + 1 : obj.$I
+    let $J = dir == 1 ? obj.$J + 1 : obj.$J
+    let steps = cI - $I
+    if(steps > 0) moveToTop(steps, obj)
+    if(steps < 0) moveToBottom(Math.abs(steps), obj)
+}
+function moveToTop(steps, obj) {
+    while (steps > 0) {
+        let [cI, cJ] = findTile(obj.tile)
+        let [_I, _J] = findGap()
+        const gPos = getGapPos(_I, _J, cI, cJ)
+        let newAction = []
+        if(gPos == GAP_LEFT && cI != arr.length -1 && cJ != arr.length -1 ) {
+            newAction = [TOP,LEFT,LEFT,BOTTOM,BOTTOM,RIGHT,TOP]
+        }
+        if(gPos == GAP_LEFT && (cI == arr.length - 1 || cJ == arr.length - 1) ) { //!!!
+            if(_cursor == 14) console.log('GAP_LEFT !!!')
+            newAction = [BOTTOM,LEFT,TOP]
+        }
+        if(gPos == GAP_BOTTOM && cJ != arr.length - 1) {
+            newAction = [LEFT,BOTTOM,BOTTOM,RIGHT,TOP]
+        }
+        if(gPos == GAP_BOTTOM && cJ == arr.length - 1) { //!!!
+            newAction = [RIGHT,BOTTOM,BOTTOM,LEFT,TOP]
+        }
+        if(gPos == GAP_RIGHT) {
+            newAction = [BOTTOM,RIGHT,TOP]
+        }
+        if(gPos == GAP_TOP) {
+            newAction = [TOP]
+        }
+        actions = actions.concat(newAction)
+        actionsLocal = actionsLocal.concat(newAction)
+        steps -= 1
+        makeSteps()
+    }
+}
+function moveToBottom(steps, obj) {
+    // throw new Error('moveToBottom are not implemented yet!')
+    while (steps > 0) {
+        let [cI, cJ] = findTile(obj.tile)
+        let [_I, _J] = findGap()
+        const gPos = getGapPos(_I, _J, cI, cJ)
+        let newAction = []
+        if(gPos == GAP_LEFT) {
+            newAction = [TOP,LEFT,BOTTOM]
+        }
+        if(gPos == GAP_BOTTOM) {
+            newAction = [BOTTOM]
+        }
+        if(gPos == GAP_RIGHT) {
+            newAction = [TOP,RIGHT,BOTTOM]
+        }
+        if(gPos == GAP_TOP && cJ != arr.length - 1) {
+            newAction = [LEFT,TOP,TOP,RIGHT,BOTTOM]
+        }
+        if(gPos == GAP_TOP && cJ == arr.length - 1) { // !!!
+            newAction = [RIGHT,TOP,TOP,LEFT,BOTTOM]
+        }
+        actions = actions.concat(newAction)
+        actionsLocal = actionsLocal.concat(newAction)
+        steps -= 1
+        makeSteps()
+    }
+}
+//Vertical
+function moveToHor(obj) {
+    let [cI, cJ] = findTile(obj.tile)
+    let [_I, _J] = findGap()
+    let dir = obj.dir
+    let $I = dir == 0 ? obj.$I + 1 : obj.$I
+    let $J = dir == 1 ? obj.$J + 1 : obj.$J
+    let steps = cJ - $J
+    if(steps > 0) moveToLeft(steps, obj)
+    if(steps < 0) moveToRight(Math.abs(steps), obj)
+}
+function moveToLeft(steps, obj) {
+    while (steps > 0) {
+        let [cI, cJ] = findTile(obj.tile)
+        let [_I, _J] = findGap()
+        const gPos = getGapPos(_I, _J, cI, cJ)
+        let newAction = []
+        if(gPos == GAP_TOP && obj.tile == 21) console.log(`gPos == GAP_TOP == ${gPos == GAP_TOP}`)
+        if(gPos == GAP_TOP && cI != arr.length - 1 &&  cJ != arr.length - 1) {
+            if(obj.tile == 21) console.log(`GAP_TOP 1`)
+            newAction = [LEFT,TOP,TOP,RIGHT,RIGHT,BOTTOM,LEFT]
+        }
+        if(gPos == GAP_TOP && cI == arr.length - 1) { //!!!
+            if(obj.tile == 21) console.log(`GAP_TOP 2`)
+            newAction = [RIGHT,TOP,LEFT]
+        }
+        if(gPos == GAP_TOP && cJ == arr.length - 1) { //!!!
+            if(obj.tile == 21) console.log(`GAP_TOP 3`)
+            newAction = [RIGHT,TOP,LEFT]
+        }
+        if(gPos == GAP_RIGHT && cI != arr.length - 1) {
+            if(obj.tile == 21) console.log(`GAP_RIGHT 1`)
+            newAction = [TOP,RIGHT,RIGHT,BOTTOM,LEFT]
+        }
+        if(gPos == GAP_RIGHT && cI == arr.length - 1) { //!!!
+            if(obj.tile == 21) console.log(`GAP_RIGHT 2`)
+            newAction = [BOTTOM,RIGHT,RIGHT,TOP,LEFT]
+        }
+        if(gPos == GAP_BOTTOM) {
+            if(obj.tile == 21) console.log(`GAP_BOTTOM`)
+            newAction = [RIGHT,BOTTOM,LEFT]
+        }
+        if(gPos == GAP_LEFT) {
+            if(obj.tile == 21) console.log(`GAP_LEFT`)
+            newAction = [LEFT]
+        }
+        actions = actions.concat(newAction)
+        actionsLocal = actionsLocal.concat(newAction)
+        steps -= 1
+        makeSteps()
+    }
+}
+function moveToRight(steps, obj) {
+    while (steps > 0) {
+        let [cI, cJ] = findTile(obj.tile)
+        let [_I, _J] = findGap()
+        const gPos = getGapPos(_I, _J, cI, cJ)
+        let newAction = []
+        if(gPos == GAP_LEFT && cI != arr.length - 1) {
+            newAction = [TOP,LEFT,LEFT,BOTTOM,RIGHT]
+        }
+        if(gPos == GAP_LEFT && cI == arr.length - 1) { //!!!
+            newAction = [BOTTOM,LEFT,LEFT,TOP,RIGHT]
+        }
+        if(gPos == GAP_BOTTOM ) {
+            newAction = [LEFT,BOTTOM,RIGHT]
+        }
+        if(gPos == GAP_TOP) {
+            newAction = [LEFT,TOP,RIGHT]
+        }
+        if(gPos == GAP_RIGHT) {
+            newAction = [RIGHT]
+        }
+        
+        actions = actions.concat(newAction)
+        actionsLocal = actionsLocal.concat(newAction)
+        steps -= 1
+        makeSteps()
+    }
+}
+
+//solution additional
+function getGapPos(_I, _J, cI, cJ) {
+    if(_I == cI && ((_J - cJ) == 1)) return GAP_RIGHT
+    if(_I == cI && ((_J - cJ) == -1)) return GAP_LEFT
+    if(((_I - cI) == 1) && _J == cJ) return GAP_BOTTOM
+    if(((_I - cI) == -1) && _J == cJ) return GAP_TOP
+    throw new Error(`WRONG GAP POSITION: gapPos=[${_I}][${_J}] tilePos=[${cI}][${cJ}]`)
+}
+function createRightPositions(size) {
+    let arr = []
+    flatArr = []
+    for(let i = 0; i < size; i++) {
+        arr.push([])
+        for(let j = 0; j < size; j++) {
+            let num = i*size + j + 1
+            arr[i].push(num < size*size ? num : 0)
+        }
+    }
+    finalArr = arr
+    for(let i = 0; i < size - 1; i++) {
+        for(let j = i; j < size - 1; j++) {
+            const obj = {
+                tile: arr[i][j],
+                $I: i,
+                $J: j,
+                dir: 0
+            }
+            if(obj.$J == size - 2) {
+                const obj2 = {
+                    tile: arr[i][j+1],
+                    $I: i,
+                    $J: j,
+                    dir: 0
+                }
+                flatArr.push(obj2)
+            }
+            flatArr.push(obj)
+        }
+        for(let j = i+1; j < size - 1; j++) {
+            const obj = {
+                tile: arr[j][i],
+                $I: j,
+                $J: i,
+                dir: 1
+            }
+            if(obj.$I == size - 2) {
+                const obj2 = {
+                    tile: arr[j+1][i],
+                    $I: j,
+                    $J: i,
+                    dir: 1
+                }
+                flatArr.push(obj2)
+            }
+            flatArr.push(obj)
+        }
+    }
+    const obj = {
+        tile: arr[size-1][size-2],
+        $i: size-1,
+        $j: size-2,
+        dir: 1
+    }
+    flatArr.push(obj)
+}
+function findTile(num) {
+    for(let i = 0; i < arr.length; i++) {
+        for(let j = 0; j < arr[i].length; j++) {
+            if(arr[i][j] == num) return [i, j]
+        }
+    }
+    return [-1, -1]
+}
+function findGap() {
+    return findTile(0)
+}
+
+function strfy(arr) {
+    let str = ''
+    for(let i = 0; i < arr.length; i++) {
+        str += JSON.stringify(arr[i]) + '\n'
+    }
+    return str
 }
