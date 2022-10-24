@@ -188,8 +188,8 @@ function createEasyModeButton(_root) {
 }
 
 function createAutofillButton(_root) {
-    let text = createNewElement('p.text-to-rev=Ну и бонусом автосборщик, чтобы пазл точно собрался ;)<br>(собирает далеко не всегда, но прикольно пазлы крутит)')
-    let button = createNewElement('button .up-button .easy-button =Auto-solution')
+    let text = createNewElement('p.text-to-rev=Ну и бонусом автосборщик<br>(не знаю, на сколько он рабочий))')
+    let button = createNewElement('button .up-button .easy-button =Slove it!')
     _root.appendChild(text)
     button.onclick = () => {
         playButton()
@@ -274,8 +274,6 @@ gameState.setFields(
 //STYLE
 function setBonsStyle() {
     let style = document.createElement('style')
-    // style.type = 'text/css'
-    let steleHD = '@media screen and (min-width: 1280px) {'
     let stylesMain = ''
     let stylesTablet = '@media screen and (max-width: 768px) {'
     let stylePhone = '@media screen and (max-width: 480px) {'
@@ -296,18 +294,8 @@ function setBonsStyle() {
                 top: ${i*35 + 5}px;
                 left: ${j*35 + 5}px;
             } `
-            steleHD +=
-            `.game-field__pos-${i+1}-${j+1}{
-                top: ${i*80 + 5}px;
-                left: ${j*80 + 5}px;
-            } `
         }
     }
-    steleHD += `.game-field{
-            height: calc(80px * ${gameState.size} + 5px);
-            width: calc(80px * ${gameState.size} + 5px);
-        }
-    }`
     stylesMain += `.game-field{
         height: calc(65px * ${gameState.size} + 5px);
         width: calc(65px * ${gameState.size} + 5px);
@@ -324,7 +312,7 @@ function setBonsStyle() {
         width: calc(35px * ${gameState.size} + 5px);
     }
 }`
-    style.innerHTML = stylesMain + "\n" + steleHD + "\n" + stylesTablet + "\n" + stylePhone
+    style.innerHTML = stylesMain + "\n" + "\n" + stylesTablet + "\n" + stylePhone
     document.getElementsByTagName('head')[0].appendChild(style);
 }
 setBonsStyle()
@@ -478,7 +466,6 @@ function getFinishedArray() {
 
 
 //SCORE
-// let score = getScore()
 function createScore(size, moves, time) {
     const date = new Date()
     return {
@@ -816,7 +803,7 @@ function loadProgress(num) {
         refreshCorrectBonsPosition()
         refreshDrag()
         closeWindow(root.children[1])
-        showMessage("Game progress has been loading...")
+        showMessage("Game progress has been loaded...")
         playMessage()
     }
 }
@@ -858,9 +845,7 @@ let actions = []
 let actionsLocal = []
 let arr = []
 let finalArr = []
-//loadProgress(0)
 
-// solution()
 function solution() {
     countsIsFinish = false
     solStart()
@@ -868,8 +853,7 @@ function solution() {
 var interval = setInterval(() => {
     if(!gameState.isStarted) actions = []
     if(countsIsFinish && gameState.isStarted) nextStep()
-    //if(!hasSteps) clearInterval(interval);
-}, 80);
+}, 120);
 function nextStep() {
     let comand = actions.shift()
     if(comand == LEFT) gameState.moveLeft(refreshCorrectBonsPosition)
@@ -881,24 +865,21 @@ function nextStep() {
 document.querySelector('.moves-tittle').onclick = () => {solStartMini; _cursor++}
 let _cursor = 0
 function solStartMini() {
-    console.log(_cursor)
     if(_cursor == 0) {
         arr = JSON.parse(JSON.stringify(gameState.gameArray)) 
         createRightPositions(gameState.size)
     }
     try{
-        console.log(`>>>>> flatArr[${_cursor}]=${flatArr[_cursor].tile} <<<<<`)
         const obj = flatArr[_cursor]
         let [cI, cJ] = findTile(obj.tile)
         let [nI, nJ] = findTile(flatArr[_cursor+1].tile)
         let [_I, _J] = findGap()
         if(obj.$I == cI && obj.$J == cJ) {
-            console.log('NICEEEE!!!')
+            
         } else if(finalArr[cI][cJ] == arr[cI][cJ]
                && finalArr[nI][nJ] == arr[nI][nJ]
                && ((cI == arr.length - 1) || (cJ == arr.length - 1))
                 ) {
-            console.log('DOUBLE NICEEEE!!!')
             _cursor++
         } else {
             if(obj.dir == 0) {
@@ -919,11 +900,9 @@ function solStartMini() {
             }
             makeSteps();
         }
-        console.log(`${flatArr[_cursor + 1].tile} == ${arr[obj.$I][obj.$J+1]}`)
         if(obj.$J == arr.length - 2 && 
             flatArr[_cursor + 1].tile == arr[obj.$I][obj.$J+1]
         ) {
-            console.log("newActive horizontal")
             let aJ = arr.length - 2
             let aI = flatArr[_cursor + 1].$I + 1
             let [_I, _J] = findGap()
@@ -934,12 +913,9 @@ function solStartMini() {
             actionsLocal = actionsLocal.concat(newActive)
             makeSteps();
         }
-        
-        console.log(`${flatArr[_cursor + 1].tile} == ${arr[obj.$I+1][obj.$J]}`)
         if(obj.$I == arr.length - 2 && 
             flatArr[_cursor + 1].tile == arr[obj.$I+1][obj.$J]
         ) {
-            console.log("newActive vertical")
             let newActive = [TOP,RIGHT,BOTTOM,LEFT,LEFT,TOP,RIGHT,BOTTOM,RIGHT,TOP,LEFT]
             actions = actions.concat(newActive)
             actionsLocal = actionsLocal.concat(newActive)
@@ -979,7 +955,6 @@ function finalSteps() {
             (arr[size-1][size-2] == size * size - 1) &&
             (arr[size-1][size-1] == 0)
         ) {
-            console.log("HORAY!!!")
             break
         }
         saveCout++
@@ -1063,7 +1038,6 @@ function moveToTop(steps, obj) {
             newAction = [TOP,LEFT,LEFT,BOTTOM,BOTTOM,RIGHT,TOP]
         }
         if(gPos == GAP_LEFT && (cI == arr.length - 1 || cJ == arr.length - 1) ) { //!!!
-            if(_cursor == 14) console.log('GAP_LEFT !!!')
             newAction = [BOTTOM,LEFT,TOP]
         }
         if(gPos == GAP_BOTTOM && cJ != arr.length - 1) {
@@ -1085,7 +1059,6 @@ function moveToTop(steps, obj) {
     }
 }
 function moveToBottom(steps, obj) {
-    // throw new Error('moveToBottom are not implemented yet!')
     while (steps > 0) {
         let [cI, cJ] = findTile(obj.tile)
         let [_I, _J] = findGap()
@@ -1129,33 +1102,25 @@ function moveToLeft(steps, obj) {
         let [_I, _J] = findGap()
         const gPos = getGapPos(_I, _J, cI, cJ)
         let newAction = []
-        if(gPos == GAP_TOP && obj.tile == 21) console.log(`gPos == GAP_TOP == ${gPos == GAP_TOP}`)
         if(gPos == GAP_TOP && cI != arr.length - 1 &&  cJ != arr.length - 1) {
-            if(obj.tile == 21) console.log(`GAP_TOP 1`)
             newAction = [LEFT,TOP,TOP,RIGHT,RIGHT,BOTTOM,LEFT]
         }
         if(gPos == GAP_TOP && cI == arr.length - 1) { //!!!
-            if(obj.tile == 21) console.log(`GAP_TOP 2`)
             newAction = [RIGHT,TOP,LEFT]
         }
         if(gPos == GAP_TOP && cJ == arr.length - 1) { //!!!
-            if(obj.tile == 21) console.log(`GAP_TOP 3`)
             newAction = [RIGHT,TOP,LEFT]
         }
         if(gPos == GAP_RIGHT && cI != arr.length - 1) {
-            if(obj.tile == 21) console.log(`GAP_RIGHT 1`)
             newAction = [TOP,RIGHT,RIGHT,BOTTOM,LEFT]
         }
         if(gPos == GAP_RIGHT && cI == arr.length - 1) { //!!!
-            if(obj.tile == 21) console.log(`GAP_RIGHT 2`)
             newAction = [BOTTOM,RIGHT,RIGHT,TOP,LEFT]
         }
         if(gPos == GAP_BOTTOM) {
-            if(obj.tile == 21) console.log(`GAP_BOTTOM`)
             newAction = [RIGHT,BOTTOM,LEFT]
         }
         if(gPos == GAP_LEFT) {
-            if(obj.tile == 21) console.log(`GAP_LEFT`)
             newAction = [LEFT]
         }
         actions = actions.concat(newAction)
