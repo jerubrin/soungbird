@@ -104,12 +104,6 @@ body {
   padding: 40px;
   margin: auto;
 }
-@media screen and (min-width: 1280px) {
-  .game-block {
-    max-width: 800px;
-    min-width: 800px;
-  }
-}
 @media screen and (max-width: 768px) {
   .game-block {
     max-width: 450px;
@@ -296,13 +290,6 @@ body {
   cursor: pointer;
   transition: 0.2s;
   z-index: 1;
-}
-@media screen and (min-width: 1280px) {
-  .game-field__boun {
-    width: 75px;
-    height: 75px;
-    font-size: 3rem;
-  }
 }
 @media screen and (max-width: 768px) {
   .game-field__boun {
