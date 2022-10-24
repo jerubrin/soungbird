@@ -314,7 +314,7 @@ function createEasyModeButton(_root) {
 }
 
 function createAutofillButton(_root) {
-    let text = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('p.text-to-rev=Ну и бонусом автосборщик, чтобы пазл точно собрался ;)')
+    let text = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('p.text-to-rev=Ну и бонусом автосборщик, чтобы пазл точно собрался ;)<br>(собирает далеко не всегда, но прикольно пазлы крутит)')
     let button = (0,_js_mylittlefw_js__WEBPACK_IMPORTED_MODULE_1__.createNewElement)('button .up-button .easy-button =Auto-solution')
     _root.appendChild(text)
     button.onclick = () => {

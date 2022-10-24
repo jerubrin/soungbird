@@ -188,7 +188,7 @@ function createEasyModeButton(_root) {
 }
 
 function createAutofillButton(_root) {
-    let text = createNewElement('p.text-to-rev=Ну и бонусом автосборщик, чтобы пазл точно собрался ;)')
+    let text = createNewElement('p.text-to-rev=Ну и бонусом автосборщик, чтобы пазл точно собрался ;)<br>(собирает далеко не всегда, но прикольно пазлы крутит)')
     let button = createNewElement('button .up-button .easy-button =Auto-solution')
     _root.appendChild(text)
     button.onclick = () => {
