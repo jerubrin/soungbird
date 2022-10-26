@@ -732,18 +732,29 @@ function refreshDrag() {
     new Array(top, bottom, left, right).forEach((el, i) => {
         if(el) {
             el.setAttribute('draggable', true)
-            el.ondragstart = (e) => {
+            el.ondragstart = dragStartEvent
+            el.ontouchstart = () => {
+                e.preventDefault()
+            }
+            function dragStartEvent(e) {
+                console.log(e)
+                //showMessage('e')
                 dropMove = i + 1
                 setTimeout(() => {
                     el.classList.add('display-none')
-                }, 1);
+                }, 0);
             }
-            el.ondrag = (e) => { e.preventDefault() }
-            el.ondragend = (e) => {
-                setTimeout(() => {
-                    el.classList.remove('display-none')
-                    dropMove = 0
-                }, 10);
+            el.ondrag = dragEvent
+            function dragEvent(e) { e.preventDefault() }
+            el.addEventListener('dragend', dragEndEvent)
+            el.ontouchend = dragEndEvent
+            function dragEndEvent(e) {
+                el.classList.remove('display-none')
+                dropMove = 0
+            }
+            el.ondragcansel = (e) => {
+                el.classList.remove('display-none')
+                dropMove = 0
             }
         }
     })
