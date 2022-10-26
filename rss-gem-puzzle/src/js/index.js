@@ -401,13 +401,19 @@ setInterval(() => {
 }, 1000)
 
 
-
 function showMessage(message, hideBack = false) {
     gameState.temporaryPause = true
     const modalWin = createNewElement(`.win-modal.hiding`)
     if(hideBack) modalWin.classList.add('win-modal_clear')
     const winMessage = createNewElement(`.win-message=${message}`)
     modalWin.appendChild(winMessage)
+    modalWin.onclick = () => {
+        modalWin.classList.add('hiding')
+        setTimeout(() => {
+            if(modalWin) root.removeChild(modalWin)
+            if(!hideBack) gameState.temporaryPause = false
+        }, 600)
+    }
     root.appendChild(modalWin)
     setTimeout(() => {modalWin.classList.remove('hiding')}, 10)
     setTimeout(() => {modalWin.classList.add('hiding')}, 3000)
@@ -807,8 +813,46 @@ function loadProgress(num) {
         playMessage()
     }
 }
+function loadProgressAtStart() {
+    let res = localStorage.getItem("gameStr_start")
+    if(!res) return
+    if(res) {
+        const newGameState = JSON.parse(res)
+        gameState.setSize (newGameState.size, refNewSize)
+        gameState.soundOn = newGameState.soundOn
+        gameState.isFinished = newGameState.isFinished
+        gameState.setMoves(newGameState.moves)
+        gameState.setTime(newGameState.time)
+        gameState.gameArray = JSON.parse(newGameState.gameArray)
+        gameState.zeroI = newGameState.zeroI
+        gameState.zeroJ = newGameState.zeroJ
+        if(newGameState.isStarted) gameState.start(() => {})
+        refreshCorrectBonsPosition()
+        refreshDrag()
+    }
+}
+
+window.onunload = saveProgressAtEnd
+function saveProgressAtEnd() {
+    let gameStr = JSON.stringify(
+        {
+            soundOn: gameState.soundOn,
+            isFinished: gameState.isFinished,
+            moves: gameState.moves,
+            time: gameState.time,
+            size: gameState.size,
+            gameArray: JSON.stringify(gameState.gameArray),
+            zeroI: gameState.zeroI,
+            zeroJ: gameState.zeroJ,
+            isStarted: gameState.isStarted,
+            date: new Date().toLocaleString()
+        }
+    )
+    localStorage.setItem("gameStr_start", gameStr)
+}
 
 setRandomPosition()
+loadProgressAtStart()
 
 //Restart
 document.querySelector('.restart-icon').onclick = () => {
