@@ -75,7 +75,7 @@ module.exports = {
                 //     noErrorOnMissing: true
                 // },
                 {
-                    from: path.resolve(__dirname, 'src/img/favicon/favicon.ico'),
+                    from: path.resolve(__dirname, 'src/assets/favicon/favicon.ico'),
                     to: path.resolve(__dirname, 'build/assets')
                 }
             ]
