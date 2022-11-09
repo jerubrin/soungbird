@@ -1,5 +1,5 @@
 {
-  "name": "codejam-q3",
+  "name": "birds",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -28,5 +28,19 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.10.0"
   },
-  "description": ""
+  "description": "Private repository for @jerubrin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rolling-scopes-school/jerubrin-JSFE2022Q3.git"
+  },
+  "keywords": [
+    "birds",
+    "sing",
+    "song",
+    "game"
+  ],
+  "bugs": {
+    "url": "https://github.com/rolling-scopes-school/jerubrin-JSFE2022Q3/issues"
+  },
+  "homepage": "https://github.com/rolling-scopes-school/jerubrin-JSFE2022Q3#readme"
 }

@@ -46,7 +46,7 @@ module.exports = {
     context: path.resolve(__dirname, ''),
     mode: 'development',
     entry: {
-        main: './src/js/index.js'
+        main: './src/index.js'
     },
     output: {
         filename: filename('js'),
