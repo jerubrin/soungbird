@@ -166,12 +166,12 @@
       "title": "Штрафные баллы"
     },
     {
-      "type": "subtask",
+      "type": "penalty",
       "text": "Использование любыx js-библиотек и фреймворков в т.ч. jQuery",
       "max": -100500
     },
     {
-      "type": "subtask",
+      "type": "penalty",
       "text": "Использование TypeScript",
       "max": -100500
     }
