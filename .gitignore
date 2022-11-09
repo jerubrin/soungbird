@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+.DS_Store
+rss-gem-puzzle/.DS_Store
+rss-gem-puzzle/src/.DS_Store
+rss-gem-puzzle/src/assets/.DS_Store
+rss-gem-puzzle/src/assets/img/.DS_Store
+rss-gem-puzzle/src/assets/img/svg/.DS_Store
