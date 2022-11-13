@@ -1,0 +1,49 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto, 0, 0;
+  padding: 0 24px;
+  background: #0c2c4a;
+  height: 100px;
+  color: #d8e5f4;
+  font-size: 1.4em;
+  z-index: 9;
+
+  &__year {
+    width: 120px;
+  }
+  &__github {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      text-decoration: #d8e5f4 underline;
+      .footer__github-text {
+        transform: scale(1.05, 1.05)
+      }
+    }
+  }
+  &__github-icon {
+    width: 24px;
+    height: 24px;
+    background: url(../../assets/svg/github.svg) no-repeat center;
+    background-size: 100%;
+    margin-right: 10px;
+  }
+  &__github-text {
+    transition: all .3s;
+    color: #d8e5f4;
+  }
+  &__rs {
+    background: url(../../assets/svg/rs-school.svg) no-repeat center;
+    background-size: contain;
+    width: 120px;
+    height: 50px;
+    cursor: pointer;
+    transition: all .3s;
+    &:hover{
+      transform: scale(1.05, 1.05);
+    }
+  }
+}

@@ -1,0 +1,262 @@
+.game {
+  min-width: 90vw;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+
+  &__level-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #00204437;
+    border-radius: 6px;
+  }
+  &__level {
+    width: calc(100% / 6);
+    min-width: 160px;
+    height: 30px;
+    background-color: transparent;
+    border-radius: 6px;
+    font-size: 1.15em;
+    cursor: default;
+    
+    &_current {
+      background-color: #1a3e77c6;
+      color: #d8e5f4;
+    }
+  }
+  &__main {
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+    background-color: #014fa937;
+    width: 100%;
+    border-radius: 6px;
+    padding: 12px;
+  }
+  &__bird-img {
+    min-width: 190px;
+    min-height: 150px;
+    background: url(../../assets/img/bird-unknown.jpg) no-repeat center;
+    background-size: cover;
+    border-radius: 6px;
+    margin-right: 16px;
+  }
+  &__main-right {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  &__name {
+    margin-top: 16px;
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  &__player {}
+  &__bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  &__select {}
+  &__aditional {}
+  &__next-btn {
+    align-self: flex-end;
+    cursor: pointer;
+    &_disabled {
+      cursor: default;
+      background: #9094aa;
+      color: #575b74;
+      border-color: #575b74;
+      &:hover {
+        background: #9094aa;
+        color: #575b74;
+        border-color: #575b74;
+      }
+    }
+  }
+}
+
+.player {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  &__play-btn {
+    width: 45px;
+    height: 45px;
+    background: url(../../assets/svg/play.svg) no-repeat center;
+    background-size: contain;
+    cursor: pointer;
+    &_pause {
+      background: url(../../assets/svg/pause.svg) no-repeat center;
+      background-size: contain;
+    }
+  }
+  &__timeline {
+    appearance: none;
+    position: relative;
+    width: 70%;
+    margin: 10px;
+    height: 6px;
+    background-color: #4984e431;
+    background: linear-gradient(90deg, #4984e4ca, #426fb7ca) no-repeat;
+    background-size: 0% 100%;
+    border: solid 1px #4984e479;
+    border-radius: 3px;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background-color: #3978dc;
+
+      border: solid 1px #1a3e77;
+      border-radius: 50%;
+      &:hover {
+        background-color: #70a1f1;
+        border: solid 1px #2d528c;
+      }
+    }
+  }
+  &__curretn {
+    position: absolute;
+    background-color: #4984e4ca;
+    border: solid 1px #4984e4d8;
+    border-radius: 3px;
+  }
+  &__point {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: #4984e4;
+    border: solid 1px #1a3e77;
+    border-radius: 50%;
+    left: -8px;
+    cursor: pointer;
+    transition: all .1s;
+  }
+  &__volume-btn {
+    width: 35px;
+    height: 35px;
+    margin-left: 16px;
+    background: url(../../assets/svg/volume-on.svg) no-repeat center;
+    background-size: contain;
+    cursor: pointer;
+  }
+  &__volume {
+    appearance: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 30%;
+    margin: 10px;
+    height: 6px;
+    background-color: #4984e431;
+    background: linear-gradient(90deg, #4984e4ca, #426fb7ca) no-repeat;
+    background-size: 0% 100%;
+    border: solid 1px #4984e479;
+    border-radius: 3px;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background-color: #3978dc;
+      border: solid 1px #1a3e77;
+      border-radius: 50%;
+      &:hover {
+        background-color: #70a1f1;
+        border: solid 1px #2d528c;
+      }
+    }
+  }
+}
+
+.select {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  &__btn {
+    min-height: 0px;
+    min-width: 120px;
+    padding: 4px 16px;
+    font-size: 1.6em;
+    &_wrong {
+      background-color: #a12f2f;
+      border: solid 2px #5c0e0e;
+      color: #e2a9a9;
+      &:hover {
+        background-color: #c65858;
+        border: solid 2px #981515;
+        color: #f0d6d6;
+      }
+      &:active {
+        background-color: #c02e2e;
+        border: solid 2px #be1f1f;
+        color: #f0d6d6;
+      }
+    }
+    &_correct {
+      background-color: #19aa19;
+      border: solid 2px #1a5c0e;
+      color: #def9e1;
+      &:hover {
+        background-color: #28ba28;
+        border: solid 2px #147303;
+        color: rgb(216, 255, 221);
+      }
+      &:active {
+        background-color: #1ecd1e;
+        border: solid 2px #289814;
+        color: rgb(216, 255, 221);
+      }
+    }
+  }
+}
+
+.aditional {
+  display: flex;
+  // flex-direction: column;
+  width: 100%;
+  margin: 10px 0;
+  background-color: #014fa937;
+  width: 100%;
+  border-radius: 6px;
+  padding: 12px;
+  
+  &__top {
+    display: flex;
+    min-width: 50%;
+  }
+  &__img {
+    min-width: 150px;
+    min-height: 100px;
+    background: no-repeat center;
+    background-size: cover;
+    border-radius: 6px;
+    margin-right: 16px;
+  }
+  &__left {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  &__name {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin: 5px 0 10px;
+  }
+  &__player {
+    max-width: 90%;
+    min-width: 90%;
+  }
+  &__name-latin {
+    font-size: 1.1em;
+    font-style: italic;
+  }
+  &__text {
+    font-size: 1.2em;
+    max-width: 50%;
+  }
+}

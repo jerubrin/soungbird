@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Marhey:wght@300;400;500;600;700&display=swap');
+
+.header {
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #74b1e7;
+  z-index: 9;
+}
+
+.logo {
+  display: flex;
+  align-items: flex-end;
+  color: #1e1e1e;
+  &__img {
+    margin-bottom: 3px;
+    background: url(../../assets/svg/bird-logo.svg);
+    width: 45px;
+    height: 45px;
+  }
+  &__text {
+    font-family: 'Marhey', cursive;
+    font-weight: 400;
+    font-size: 3em;
+    letter-spacing: -0.07em;
+  }
+}
+
+.nav {
+  margin-left: 24px;
+  font-size: 1.2em;
+
+  &__ul {
+    display: flex;
+  }
+  &__li {
+    margin: 12px;
+  }
+  &__link {
+    transition: all .3s;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+      transform: scale(1.1, 1.1);
+    }
+  }
+}
+
+.langs {
+  display: flex;
+  margin-left: auto;
+  margin-right: 24px;
+  font-size: 1.2em;
+  
+  * {
+    margin: 5px;
+  }
+
+  &__link{
+    transition: all .3s;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+      transform: scale(1.1, 1.1)
+    }
+  }
+
+  &__link_active {
+    text-decoration: none !important;
+    cursor: default !important;
+    transform: scale(1, 1) !important;
+    font-weight: 700;
+  }
+
+  &__split {}
+}
+
+.score {
+  color: #1e1e1e;
+  display: flex;
+  font-size: 1.7em;
+  &__text {
+    margin-right: 6px;
+  }
+  &__number {
+    font-weight: 700;
+  }
+}
