@@ -1,5 +1,5 @@
 import openFinishPage from "../pages/finish-page";
-import openGamePage from "../pages/game-page";
+import openGamePage, { DISPLAY_NONE } from "../pages/game-page";
 import openStartPage from "../pages/start-page";
 
 export const clearView = root => root.innerHTML = '';
@@ -14,10 +14,12 @@ export const router = [
     players.forEach(player => player.stop())
   },
   () => {
+    
+  },
+  () => {
     openFinishPage(document.body)
     players.forEach(player => player.stop())
   },
-  () => {},
 ]
 
 export const gameStatus = {
@@ -72,19 +74,33 @@ export class useClassState {
   }
 }
 
+const MUTED_CLASS = 'player__volume-btn_mute'
+
 export const players = []
 export function usePlayerState(_block, type) {
   let audio = null
   let isPlaying = false
-  const _playButton = _block.children[0]
-  const _timeline = _block.children[1]
+  const _wrapper = _block.firstChild
+  const _playButton = _block.firstChild.children[0]
+  const _timeline = _block.firstChild.children[1].firstChild
+  const _curTime = _block.firstChild.children[1].children[1].firstChild
+  const _durTime = _block.firstChild.children[1].children[1].children[1]
 
-  const _soundButton = _block.children[2]
-  const _volLine = _block.children[3]
+  const _volumeButton = _block.firstChild.children[2]
+  const _volLine = _block.firstChild.children[3]
+
+  const _loading = _block.children[1]
+
+  const loadingState = new useClassState(DISPLAY_NONE, _loading)
+  loadingState.setVal(false)
+  const playerDisplayState = new useClassState(DISPLAY_NONE, _wrapper);
+  playerDisplayState.setVal(true)
+  const volumeButtonState = new useClassState(MUTED_CLASS, _volumeButton)
 
   let isMoving = false
   setInterval(() => {
     if(!audio || isMoving) return
+    _curTime.textContent = getFormatedTime(audio.currentTime)
     _timeline.valueAsNumber = audio.currentTime
     const t = {
       style: _timeline.style,
@@ -108,10 +124,13 @@ export function usePlayerState(_block, type) {
     }
   }
 
-  function setAudio(url) { 
+  function setAudio(url) {
+    loadingState.setVal(false)
+    playerDisplayState.setVal(true)
     audio = new Audio(url)
     _timeline.valueAsNumber = 0;
     _volLine.value = getVolume(type);
+    volumeButtonState.setVal(_volLine.value == 0)
     audio.volume = _volLine.value / 100
     const t = {
       style: _volLine.style,
@@ -122,11 +141,17 @@ export function usePlayerState(_block, type) {
     setStyleForTimeline(t)
     audio.onloadedmetadata = () => {
       _timeline.max = audio.duration;
+      _durTime.textContent = getFormatedTime(audio.duration)
+    }
+    audio.onloadeddata = () => {
+      loadingState.setVal(true)
+      playerDisplayState.setVal(false)
     }
   }
   
   _timeline.oninput = e => {
     setStyleForTimeline(e.target)
+    _curTime.textContent = getFormatedTime(e.target.value)
     isMoving = true
   }
   _timeline.onchange = function(e) {
@@ -137,10 +162,33 @@ export function usePlayerState(_block, type) {
 
   _volLine.oninput = function(e) {
     audio.volume = e.target.valueAsNumber / 100;
+    volumeButtonState.setVal(e.target.valueAsNumber == 0)
     setStyleForTimeline(e.target)
   }
   _volLine.onchange = function(e) {
     setVolume(e.target.value, type)
+  }
+
+  _volumeButton.onclick = function(e) {
+    if(_volLine.valueAsNumber == 0) {
+      const vol = getWasVolume(type)
+      setVolume(vol, type)
+      _volLine.value = vol
+      audio.volume = vol / 100
+    } else {
+      setWasVolume(_volLine.valueAsNumber, type);
+      setVolume(0, type)
+      _volLine.value = 0
+      audio.volume = 0
+    }
+    volumeButtonState.setVal(_volLine.valueAsNumber == 0)
+    const t = {
+      style: _volLine.style,
+      value: _volLine.value,
+      min: 0,
+      max: 100
+    }
+    setStyleForTimeline(t)
   }
 
   function setStyleForTimeline(t) {
@@ -181,4 +229,20 @@ function setVolume(vol, type){
 export function getVolume(type){
   const vol = localStorage.getItem(type);
   return vol ? vol : 100
+}
+
+function setWasVolume(vol, type){
+  localStorage.setItem(type + "_WAS", vol)
+}
+
+function getWasVolume(type){
+  const vol = localStorage.getItem(type + "_WAS");
+  return vol ? vol : 100
+}
+
+export function getFormatedTime(time) {
+  const m = Math.trunc(time / 60)
+  const s = Math.trunc(time % 60)
+  return ((m < 10) ? ('0' + m) : (m)) + ':' +
+         ((s < 10) ? ('0' + s) : (s));
 }

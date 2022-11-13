@@ -1,12 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Marhey:wght@300;400;500;600;700&display=swap');
 
 .header {
+  position: relative;
   padding: 20px 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #74b1e7;
   z-index: 9;
+  @media screen and (max-width: 870px) {
+    height: 135px;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  @media screen and (max-width: 450px) {
+    padding: 10px 8px;
+    height: 98px;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
 }
 
 .logo {
@@ -18,12 +30,26 @@
     background: url(../../assets/svg/bird-logo.svg);
     width: 45px;
     height: 45px;
+    @media screen and (max-width: 870px) {
+      width: 35px;
+      height: 35px;
+    }
+    @media screen and (max-width: 450px) {
+      width: 24px;
+      height: 24px;
+    }
   }
   &__text {
     font-family: 'Marhey', cursive;
     font-weight: 400;
     font-size: 3em;
     letter-spacing: -0.07em;
+    @media screen and (max-width: 870px) {
+      font-size: 2.5em;
+    }
+    @media screen and (max-width: 450px) {
+      font-size: 1.8em;
+    }
   }
 }
 
@@ -31,11 +57,24 @@
   margin-left: 24px;
   font-size: 1.2em;
 
+  @media screen and (max-width: 870px) {
+    margin-left: 0;
+  }
+  @media screen and (max-width: 450px) {
+    font-size: 1em;
+  }
+
   &__ul {
     display: flex;
   }
   &__li {
     margin: 12px;
+    @media screen and (max-width: 870px) {
+      margin: 8px 12px 4px;
+    }
+    @media screen and (max-width: 450px) {
+      margin: 8px 6px;
+    }
   }
   &__link {
     transition: all .3s;
@@ -58,6 +97,16 @@
     margin: 5px;
   }
 
+  @media screen and (max-width: 870px) {
+    position: absolute;
+    right: 20px;
+  }
+  @media screen and (max-width: 450px) {
+    left: 12px;
+    bottom: 8px;
+    font-size: 1em;
+  }
+
   &__link{
     transition: all .3s;
 
@@ -74,14 +123,21 @@
     transform: scale(1, 1) !important;
     font-weight: 700;
   }
-
-  &__split {}
 }
 
 .score {
   color: #1e1e1e;
   display: flex;
   font-size: 1.7em;
+  @media screen and (max-width: 870px) {
+    margin-top: 4px;
+    font-size: 1.5em;
+  }
+  @media screen and (max-width: 450px) {
+    font-size: 1.2em;
+    margin-left: auto;
+    margin-right: 8px;
+  }
   &__text {
     margin-right: 6px;
   }

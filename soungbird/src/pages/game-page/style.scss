@@ -24,6 +24,14 @@
       background-color: #1a3e77c6;
       color: #d8e5f4;
     }
+    &_done {
+      background-color: #40649dad;
+      color: #8fa8c4;
+    }
+    @media screen and (max-width: 450px) {
+      font-size: 1.05em;
+      min-width: 142px;
+    }
   }
   &__main {
     display: flex;
@@ -33,6 +41,10 @@
     width: 100%;
     border-radius: 6px;
     padding: 12px;
+    @media screen and (max-width: 580px) {
+      flex-direction: column;
+      align-items: center;
+    }
   }
   &__bird-img {
     min-width: 190px;
@@ -41,6 +53,9 @@
     background-size: cover;
     border-radius: 6px;
     margin-right: 16px;
+    @media screen and (max-width: 580px) {
+      width: 260px;
+    }
   }
   &__main-right {
     display: flex;
@@ -79,8 +94,15 @@
 
 .player {
   display: flex;
+  flex-direction: column;
   width: 100%;
   align-items: center;
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
 
   &__play-btn {
     width: 45px;
@@ -92,12 +114,19 @@
       background: url(../../assets/svg/pause.svg) no-repeat center;
       background-size: contain;
     }
+    &:hover {
+      opacity: .8;
+      transform: scale(1.05, 1.05);
+    }
+  }
+  &__timeline-wrapper {
+    width: 70%;
   }
   &__timeline {
     appearance: none;
     position: relative;
-    width: 70%;
-    margin: 10px;
+    width: 100%;
+    margin: 8px;
     height: 6px;
     background-color: #4984e431;
     background: linear-gradient(90deg, #4984e4ca, #426fb7ca) no-repeat;
@@ -143,6 +172,14 @@
     background: url(../../assets/svg/volume-on.svg) no-repeat center;
     background-size: contain;
     cursor: pointer;
+    &_mute {
+      background: url(../../assets/svg/volume-off.svg) no-repeat center;
+      background-size: contain;
+    }
+    &:hover {
+      opacity: .8;
+      transform: scale(1.05, 1.05);
+    }
   }
   &__volume {
     appearance: none;
@@ -170,6 +207,12 @@
         border: solid 1px #2d528c;
       }
     }
+  }
+  &__time {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 8px;
   }
 }
 
@@ -212,6 +255,10 @@
         color: rgb(216, 255, 221);
       }
     }
+    @media screen and (max-width: 450px) {
+      font-size: 1.2em;
+      min-height: 38px;
+    }
   }
 }
 
@@ -224,10 +271,17 @@
   width: 100%;
   border-radius: 6px;
   padding: 12px;
+  @media screen and (max-width: 870px) {
+    flex-direction: column;
+  }
   
   &__top {
     display: flex;
     min-width: 50%;
+    @media screen and (max-width: 580px) {
+      flex-direction: column;
+      align-items: center;
+    }
   }
   &__img {
     min-width: 150px;
@@ -250,6 +304,10 @@
   &__player {
     max-width: 90%;
     min-width: 90%;
+    @media screen and (max-width: 580px) {
+      margin-top: 8px;
+      max-width: 100%;
+    }
   }
   &__name-latin {
     font-size: 1.1em;
@@ -258,5 +316,41 @@
   &__text {
     font-size: 1.2em;
     max-width: 50%;
+    @media screen and (max-width: 870px) {
+      margin-top: 12px;
+      margin-bottom: 8px;
+      max-width: 100%;
+    }
   }
 }
+
+//Loading 
+$d: 1em;
+$t: 1.1s;
+
+.a {
+	padding-top: 1em;
+	background: currentcolor;
+	color: transparent;
+	text-align: center
+}
+
+.dot {	
+	background: #769aea;
+  margin-right: 5px;
+	
+	&, &:after {
+		display: inline-block;
+		width: $d; height: $d;
+		border-radius: 50%;
+		animation: a $t calc(((var(--i) + var(--o, 0))/var(--n) - 1)*#{$t}) infinite
+	}
+	
+	&:after {
+		--o: 1;
+		background: #99bee7;
+		content: ''
+	}
+}
+
+@keyframes a { 0%, 50% { transform: scale(0) } }

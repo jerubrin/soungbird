@@ -201,6 +201,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "VOLUME_MAIN": () => (/* binding */ VOLUME_MAIN),
 /* harmony export */   "clearView": () => (/* binding */ clearView),
 /* harmony export */   "gameStatus": () => (/* binding */ gameStatus),
+/* harmony export */   "getFormatedTime": () => (/* binding */ getFormatedTime),
 /* harmony export */   "getVolume": () => (/* binding */ getVolume),
 /* harmony export */   "players": () => (/* binding */ players),
 /* harmony export */   "router": () => (/* binding */ router),
@@ -228,10 +229,12 @@ const router = [
     players.forEach(player => player.stop())
   },
   () => {
+    
+  },
+  () => {
     (0,_pages_finish_page__WEBPACK_IMPORTED_MODULE_0__["default"])(document.body)
     players.forEach(player => player.stop())
   },
-  () => {},
 ]
 
 const gameStatus = {
@@ -286,19 +289,33 @@ class useClassState {
   }
 }
 
+const MUTED_CLASS = 'player__volume-btn_mute'
+
 const players = []
 function usePlayerState(_block, type) {
   let audio = null
   let isPlaying = false
-  const _playButton = _block.children[0]
-  const _timeline = _block.children[1]
+  const _wrapper = _block.firstChild
+  const _playButton = _block.firstChild.children[0]
+  const _timeline = _block.firstChild.children[1].firstChild
+  const _curTime = _block.firstChild.children[1].children[1].firstChild
+  const _durTime = _block.firstChild.children[1].children[1].children[1]
 
-  const _soundButton = _block.children[2]
-  const _volLine = _block.children[3]
+  const _volumeButton = _block.firstChild.children[2]
+  const _volLine = _block.firstChild.children[3]
+
+  const _loading = _block.children[1]
+
+  const loadingState = new useClassState(_pages_game_page__WEBPACK_IMPORTED_MODULE_1__.DISPLAY_NONE, _loading)
+  loadingState.setVal(false)
+  const playerDisplayState = new useClassState(_pages_game_page__WEBPACK_IMPORTED_MODULE_1__.DISPLAY_NONE, _wrapper);
+  playerDisplayState.setVal(true)
+  const volumeButtonState = new useClassState(MUTED_CLASS, _volumeButton)
 
   let isMoving = false
   setInterval(() => {
     if(!audio || isMoving) return
+    _curTime.textContent = getFormatedTime(audio.currentTime)
     _timeline.valueAsNumber = audio.currentTime
     const t = {
       style: _timeline.style,
@@ -322,10 +339,13 @@ function usePlayerState(_block, type) {
     }
   }
 
-  function setAudio(url) { 
+  function setAudio(url) {
+    loadingState.setVal(false)
+    playerDisplayState.setVal(true)
     audio = new Audio(url)
     _timeline.valueAsNumber = 0;
     _volLine.value = getVolume(type);
+    volumeButtonState.setVal(_volLine.value == 0)
     audio.volume = _volLine.value / 100
     const t = {
       style: _volLine.style,
@@ -336,11 +356,17 @@ function usePlayerState(_block, type) {
     setStyleForTimeline(t)
     audio.onloadedmetadata = () => {
       _timeline.max = audio.duration;
+      _durTime.textContent = getFormatedTime(audio.duration)
+    }
+    audio.onloadeddata = () => {
+      loadingState.setVal(true)
+      playerDisplayState.setVal(false)
     }
   }
   
   _timeline.oninput = e => {
     setStyleForTimeline(e.target)
+    _curTime.textContent = getFormatedTime(e.target.value)
     isMoving = true
   }
   _timeline.onchange = function(e) {
@@ -351,10 +377,33 @@ function usePlayerState(_block, type) {
 
   _volLine.oninput = function(e) {
     audio.volume = e.target.valueAsNumber / 100;
+    volumeButtonState.setVal(e.target.valueAsNumber == 0)
     setStyleForTimeline(e.target)
   }
   _volLine.onchange = function(e) {
     setVolume(e.target.value, type)
+  }
+
+  _volumeButton.onclick = function(e) {
+    if(_volLine.valueAsNumber == 0) {
+      const vol = getWasVolume(type)
+      setVolume(vol, type)
+      _volLine.value = vol
+      audio.volume = vol / 100
+    } else {
+      setWasVolume(_volLine.valueAsNumber, type);
+      setVolume(0, type)
+      _volLine.value = 0
+      audio.volume = 0
+    }
+    volumeButtonState.setVal(_volLine.valueAsNumber == 0)
+    const t = {
+      style: _volLine.style,
+      value: _volLine.value,
+      min: 0,
+      max: 100
+    }
+    setStyleForTimeline(t)
   }
 
   function setStyleForTimeline(t) {
@@ -395,6 +444,22 @@ function setVolume(vol, type){
 function getVolume(type){
   const vol = localStorage.getItem(type);
   return vol ? vol : 100
+}
+
+function setWasVolume(vol, type){
+  localStorage.setItem(type + "_WAS", vol)
+}
+
+function getWasVolume(type){
+  const vol = localStorage.getItem(type + "_WAS");
+  return vol ? vol : 100
+}
+
+function getFormatedTime(time) {
+  const m = Math.trunc(time / 60)
+  const s = Math.trunc(time % 60)
+  return ((m < 10) ? ('0' + m) : (m)) + ':' +
+         ((s < 10) ? ('0' + s) : (s));
 }
 
 /***/ }),
@@ -465,20 +530,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const correctAudio = new Audio(_assets_audio_correct_wav__WEBPACK_IMPORTED_MODULE_0__)
 const playCorrect = () => {
+  const correctAudio = new Audio(_assets_audio_correct_wav__WEBPACK_IMPORTED_MODULE_0__)
   correctAudio.volume = (0,_commands__WEBPACK_IMPORTED_MODULE_3__.getVolume)(_commands__WEBPACK_IMPORTED_MODULE_3__.VOLUME_MAIN) / 100
   correctAudio.play()
 }
 
-const wrongAudio = new Audio(_assets_audio_lose_wav__WEBPACK_IMPORTED_MODULE_1__)
 const playWrong = () => {
+  const wrongAudio = new Audio(_assets_audio_lose_wav__WEBPACK_IMPORTED_MODULE_1__)
   wrongAudio.volume = (0,_commands__WEBPACK_IMPORTED_MODULE_3__.getVolume)(_commands__WEBPACK_IMPORTED_MODULE_3__.VOLUME_MAIN) / 100
   wrongAudio.play()
 }
 
-const endGameAudio = new Audio(_assets_audio_end_game_wav__WEBPACK_IMPORTED_MODULE_2__)
 const playEnd = () => {
+  const endGameAudio = new Audio(_assets_audio_end_game_wav__WEBPACK_IMPORTED_MODULE_2__)
   endGameAudio.volume = (0,_commands__WEBPACK_IMPORTED_MODULE_3__.getVolume)(_commands__WEBPACK_IMPORTED_MODULE_3__.VOLUME_MAIN) / 100
   endGameAudio.play()
 }
@@ -576,6 +641,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _module_commands__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../module/commands */ "./src/module/commands.js");
 /* harmony import */ var _module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../module/my-little-fw */ "./src/module/my-little-fw.js");
 /* harmony import */ var _module_settings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../module/settings */ "./src/module/settings.js");
+/* harmony import */ var _module_player__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../module/player */ "./src/module/player.js");
+
 
 
 
@@ -587,10 +654,11 @@ __webpack_require__.r(__webpack_exports__);
 const MAX_SCORE = 30;
 
 function openFinishPage(root) {
-  (0,_module_settings__WEBPACK_IMPORTED_MODULE_5__.setScore)(_module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.score)
+  (0,_module_player__WEBPACK_IMPORTED_MODULE_6__.playEnd)()
+  ;(0,_module_settings__WEBPACK_IMPORTED_MODULE_5__.setScore)(_module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.score)
   ;(0,_module_commands__WEBPACK_IMPORTED_MODULE_3__.clearView)(root)
   root.appendChild((0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.body-back'))
-  const [_scoreText, _score] = (0,_components_header_header__WEBPACK_IMPORTED_MODULE_2__.createHeader)(root, 2)
+  const [_scoreText, _score] = (0,_components_header_header__WEBPACK_IMPORTED_MODULE_2__.createHeader)(root, 3)
   _scoreText.textContent = (0,_module_settings__WEBPACK_IMPORTED_MODULE_5__.getTextByKey)('score')
   _score.textContent = _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.score;
 
@@ -598,7 +666,9 @@ function openFinishPage(root) {
   ;(0,_components_footer__WEBPACK_IMPORTED_MODULE_1__.createFooter)(_main)
   
   _finish__button.onclick = 
-    _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.score == MAX_SCORE ? _module_commands__WEBPACK_IMPORTED_MODULE_3__.router[0] : _module_commands__WEBPACK_IMPORTED_MODULE_3__.router[1]
+    _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.score == MAX_SCORE ? _module_commands__WEBPACK_IMPORTED_MODULE_3__.router[0] : _module_commands__WEBPACK_IMPORTED_MODULE_3__.router[1];
+  _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.score = 0;
+  _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.missCh = [];
 }
 
 const createView = (root) => {
@@ -642,6 +712,7 @@ const createView = (root) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "DISPLAY_NONE": () => (/* binding */ DISPLAY_NONE),
 /* harmony export */   "default": () => (/* binding */ openGamePage)
 /* harmony export */ });
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! .//style.scss */ "./src/pages/game-page/style.scss");
@@ -749,7 +820,9 @@ const createView = (root, _score) => {
 }
 
 const createPlayer = (_player, type) => {
+  const _player__wrapper = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.player__wrapper')
   const _player__playBtn = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.player__play-btn');
+  const _player__timelineWrapper = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.player__timeline-wrapper')
   const _player__timeline = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('input.player__timeline');
   _player__timeline.setAttribute('type', 'range');
   _player__timeline.setAttribute('step', 0.1);
@@ -759,9 +832,25 @@ const createPlayer = (_player, type) => {
   const _player__volume = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('input.player__volume');
   _player__volume.setAttribute('type', 'range');
   _player__volume.max = 100;
-  
-  _player.append(_player__playBtn, _player__timeline, _player__volumeBtn, _player__volume)
 
+  const _player__loading = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.player__loading')
+  const _a = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.player__loading.a')
+  _a.setAttribute('style', '--n: 10')
+  for(let i = 0; i < 10; i++) {
+    const _dot = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.dot')
+    _dot.setAttribute('style', '--i: '+i)
+    _a.append(_dot)
+  }
+  _player__loading.append(_a);
+
+  const _player__time = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)('.player__time');
+  const _player__timeCur = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)(`.player__time-cur=00:00`);
+  const _player__timeDur = (0,_module_my_little_fw__WEBPACK_IMPORTED_MODULE_4__.createNewElement)(`.player__time-dur=00:00`);
+  _player__time.append(_player__timeCur, _player__timeDur)
+  
+  _player__timelineWrapper.append(_player__timeline, _player__time)
+  _player__wrapper.append(_player__playBtn, _player__timelineWrapper, _player__volumeBtn, _player__volume)
+  _player.append(_player__wrapper, _player__loading)
   return _player
 }
 
@@ -856,6 +945,11 @@ function startGame(blocksBundle) {
       sel.textContent = (0,_module_settings__WEBPACK_IMPORTED_MODULE_5__.getBirdByLevelAndNumber)(_module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.level, i).name
     })
 
+    for(let i = 0; i < _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.level; i++) {
+      blocksBundle.topLevels.children[i].classList.add(
+        "game__level_done"
+      )
+    }
     blocksBundle.topLevels.children[_module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.level].classList.add(
       "game__level_current"
     )
@@ -925,7 +1019,7 @@ function startGame(blocksBundle) {
     if(_module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.level == 5) {
       _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.isStarted = false;
       _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.chousedCorrectBird = false;
-      _module_commands__WEBPACK_IMPORTED_MODULE_3__.router[2]();
+      _module_commands__WEBPACK_IMPORTED_MODULE_3__.router[3]();
     } else {
       _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.level = _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.level + 1
       _module_commands__WEBPACK_IMPORTED_MODULE_3__.gameStatus.chousedCorrectBird = false;

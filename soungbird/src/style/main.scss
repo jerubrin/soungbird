@@ -34,6 +34,9 @@ body {
   font-size: 2em;
   transition: all .2s;
   user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &:hover {
     border: 2px solid #5d7e96;
     background: #a2c7e3;
@@ -41,6 +44,17 @@ body {
   &:active {
     border: 2px solid #6188be;
     background: #698ecc;
+  }
+  @media screen and (max-width: 870px) {
+    padding: 4px 8px;
+    max-width: 300px;
+    min-width: 160px;
+    min-height: 40px;
+    border-radius: 6px;
+    font-size: 1.7em;
+  }
+  @media screen and (max-width: 450px) {
+    font-size: 1.2em;
   }
 }
 
@@ -52,6 +66,9 @@ body {
   background: #ffffff63;
   overflow-x: hidden;
   overflow-y: auto;
+  @media screen and (max-width: 870px) {
+    padding: 12px;
+  }
   &__bird-1 {
     background: url(../assets/img/bird-1.png) no-repeat top;
     background-size: 100%;
@@ -61,6 +78,10 @@ body {
     height: 20vw;
     position: absolute;
     animation: bird-anim-1 8s infinite;
+    @media screen and (max-width: 450px) {
+      width: 40vw;
+      height: 30vw;
+    }
   }
   &__bird-2 {
     background: url(../assets/img/bird-2.png) no-repeat bottom;
@@ -72,6 +93,10 @@ body {
     position: absolute;
     animation: bird-anim-2 10s infinite;
     z-index: 1;
+    @media screen and (max-width: 450px) {
+      width: 40vw;
+      height: 30vw;
+    }
   }
   &__bird-3 {
     background: url(../assets/img/bird-3.png) no-repeat top;
@@ -83,6 +108,10 @@ body {
     position: absolute;
     animation: bird-anim-2 14s infinite;
     z-index: 0;
+    @media screen and (max-width: 450px) {
+      width: 24vw;
+    height: 30vw;
+    }
   }
 }
 
@@ -92,6 +121,12 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 870px) {
+    min-height: calc(100vh - 135px);
+  }
+  @media screen and (max-width: 450px) {
+    min-height: calc(100vh - 98px);
+  }
 }
 
 .container {
@@ -99,6 +134,9 @@ body {
   background-color: #c1dcf7;
   margin: auto;
   border-radius: 8px;
+  @media screen and (max-width: 870px) {
+    padding: 12px;
+  }
 }
 
 .display-none {

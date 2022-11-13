@@ -5,14 +5,16 @@ import { createHeader } from "../../components/header/header"
 import { clearView, gameStatus, router } from "../../module/commands"
 import { createNewElement } from "../../module/my-little-fw"
 import { getTextByKey, setScore } from "../../module/settings"
+import { playEnd } from '../../module/player'
 
 const MAX_SCORE = 30;
 
 export default function openFinishPage(root) {
+  playEnd()
   setScore(gameStatus.score)
   clearView(root)
   root.appendChild(createNewElement('.body-back'))
-  const [_scoreText, _score] = createHeader(root, 2)
+  const [_scoreText, _score] = createHeader(root, 3)
   _scoreText.textContent = getTextByKey('score')
   _score.textContent = gameStatus.score;
 
@@ -20,7 +22,9 @@ export default function openFinishPage(root) {
   createFooter(_main)
   
   _finish__button.onclick = 
-    gameStatus.score == MAX_SCORE ? router[0] : router[1]
+    gameStatus.score == MAX_SCORE ? router[0] : router[1];
+  gameStatus.score = 0;
+  gameStatus.missCh = [];
 }
 
 const createView = (root) => {
