@@ -302,6 +302,7 @@ function usePlayerState(_playerBlock, volumeType) {
       max: 100
     }
     setStyleForTimeline(t)
+    audio.preload = 'metadata'
     audio.onloadeddata = () => {
       _timeline.max = audio.duration;
       _durTime.textContent = getFormatedTime(audio.duration)
