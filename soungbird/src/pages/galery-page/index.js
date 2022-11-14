@@ -56,6 +56,7 @@ const createGalleryList = root => {
   console.log(createBirdsData().flat())
   const cardsArray = createBirdsData()
     .flat()
+    .sort((a, b) => (a.name > b.name) ? 1 : -1)
     .map(bird => {
       const _card = createNewElement('.card')
       const _picture = createNewElement('.card__picture')
