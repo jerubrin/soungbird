@@ -4,10 +4,12 @@ import birdsEn from '../../entities/birds-en-us.json'
 
 import { createFooter } from "../../components/footer"
 import { createHeader } from "../../components/header/header"
-import { clearView, gameStatus, router, stopAllPlayers, usePlayerState, VOLUME_MAIN } from "../../module/commands"
-import { createNewElement } from "../../module/my-little-fw"
-import { getLang, getScore, getTextByKey, langs, setScore } from "../../module/settings"
-import { createPlayer } from '../../module/player'
+import { createNewElement } from "../../module/blocks-creator"
+import { getLang, getScore, getTextByKey, langs, setScore } from "../../module/content-filler"
+import { createPlayer } from '../../components/player/player'
+import { stopAllPlayers, usePlayerState, VOLUME_MAIN } from '../../components/player/player.hook'
+import { clearView } from '../../module/clear-view'
+import { gameStatus } from '../../module/game-status'
 
 const MAX_SCORE = 30;
 
@@ -97,7 +99,7 @@ const createModalWindow = (bird) => {
   const _description = createNewElement(`.modal__description=${description}`)
   const _player = createNewElement('.modal__player.player')
   const player = createPlayer(_player, VOLUME_MAIN)
-  const playerState = new usePlayerState(player, VOLUME_MAIN)
+  const playerState = usePlayerState(player, VOLUME_MAIN)
   playerState.setAudio(audio)
 
   _right.append(_name, _latin, _player)

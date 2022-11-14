@@ -1,16 +1,20 @@
 import './/style.scss'
 import { createHeader } from "../../components/header/header";
-import { createNewElement, createNewElements } from "../../module/my-little-fw";
-import { getScore, getTextByKey } from "../../module/settings";
+import { createNewElement, createNewElements } from "../../module/blocks-creator";
+import { getScore, getTextByKey } from "../../module/content-filler";
 import { createFooter } from '../../components/footer';
-import { clearView, gameStatus, router } from '../../module/commands';
+import { router } from '../../module/router';
+import { clearView } from '../../module/clear-view';
+import { gameStatus } from '../../module/game-status';
 
 export default function openStartPage(root) {
   clearView(root)
+
   root.appendChild(createNewElement('.body-back'))
   const [_scoreText, _score] = createHeader(root, 0)
   _scoreText.textContent = getTextByKey('scoreStart')
   _score.textContent = getScore()
+
   const [startButton, galleryButton] = createView(root)
   createButtonEvents(startButton, galleryButton, root, router)
   createFooter(root)

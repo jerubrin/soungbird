@@ -1,10 +1,14 @@
 import './/style.scss'
 import { createFooter } from "../../components/footer"
 import { createHeader } from "../../components/header/header"
-import { clearView, gameStatus, router, useClassState, useImageState, usePlayerState, useState, VOLUME_ADDITIONAL, VOLUME_MAIN } from "../../module/commands"
-import { createNewElement, createNewElements } from "../../module/my-little-fw"
-import { getBirdByLevelAndNumber, getTextByKey } from "../../module/settings"
-import { createPlayer, playCorrect, playWrong } from '../../module/player'
+import { useClassState, useImageState, useState} from "../../module/hooks"
+import { createNewElement, createNewElements } from "../../module/blocks-creator"
+import { getBirdByLevelAndNumber, getTextByKey } from "../../module/content-filler"
+import { createPlayer, playCorrect, playWrong } from '../../components/player/player'
+import { usePlayerState, VOLUME_ADDITIONAL, VOLUME_MAIN } from '../../components/player/player.hook.js'
+import { router } from '../../module/router'
+import { clearView } from '../../module/clear-view'
+import { gameStatus } from '../../module/game-status'
 
 export const DISPLAY_NONE = 'display-none';
 
@@ -97,19 +101,19 @@ const createView = (root, _score) => {
 
 function startGame(blocksBundle) {
   const states = {
-    nameState: new useState('', blocksBundle.name),
-    imgState: new useImageState('', blocksBundle.img),
-    player: new usePlayerState(blocksBundle.player, VOLUME_MAIN),
-    scoreState: new useState(0, blocksBundle.score),
+    nameState: useState('', blocksBundle.name),
+    imgState: useImageState('', blocksBundle.img),
+    player: usePlayerState(blocksBundle.player, VOLUME_MAIN),
+    scoreState: useState(0, blocksBundle.score),
     aditionalStates: {
-      displayState: new useClassState(DISPLAY_NONE, blocksBundle.aditional.container),
-      nameState: new useState('', blocksBundle.aditional.name),
-      latinState: new useState('', blocksBundle.aditional.latin),
-      imgState: new useImageState('', blocksBundle.aditional.img),
-      player: new usePlayerState(blocksBundle.aditional.player, VOLUME_ADDITIONAL),
-      textState: new useState('', blocksBundle.aditional.text),
+      displayState: useClassState(DISPLAY_NONE, blocksBundle.aditional.container),
+      nameState: useState('', blocksBundle.aditional.name),
+      latinState: useState('', blocksBundle.aditional.latin),
+      imgState: useImageState('', blocksBundle.aditional.img),
+      player: usePlayerState(blocksBundle.aditional.player, VOLUME_ADDITIONAL),
+      textState: useState('', blocksBundle.aditional.text),
     },
-    nextState: new useClassState('game__next-btn_disabled', blocksBundle.next)
+    nextState: useClassState('game__next-btn_disabled', blocksBundle.next)
   }
 
   if(!gameStatus.isStarted) {

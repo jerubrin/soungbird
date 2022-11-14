@@ -1,7 +1,7 @@
 import './/style.scss';
-import { createNewElement } from '../../module/my-little-fw';
-import { getLang, getTextByKey, langs, setLang } from '../../module/settings';
-import { router } from '../../module/commands';
+import { createNewElement } from '../../module/blocks-creator';
+import { getLang, getTextByKey, langs, setLang } from '../../module/content-filler';
+import { router } from '../../module/router';
 
 export const createHeader = (root, routerNum) => {
   const _header = createNewElement('header.header')
@@ -13,11 +13,13 @@ export const createHeader = (root, routerNum) => {
   const linkNames = getTextByKey("links");
   const _nav = createNewElement('.nav');
   const _nav__ul = createNewElement('ul.nav__ul');
-  [1, 2, 3].map((it, i) => {return [
-    'li.nav__li.nav__li_' + it, 
-    'a.nav__link.nav__link_' + it 
-      + `=${linkNames[i]}`
-  ]}).forEach((it, i) => {
+
+  [1, 2, 3].map((it, i) => {
+    return [
+      `li.nav__li.nav__li_${it}`, 
+      `a.nav__link.nav__link_${it}=${linkNames[i]}`
+    ]
+  }).forEach((it, i) => {
     const _nav__li = createNewElement(it[0]);
     const _nav__a = createNewElement(it[1]);
     _nav__li.append(_nav__a);

@@ -1,8 +1,10 @@
-import correct from '../assets/audio/correct.wav';
-import wrong from '../assets/audio/lose.wav'
-import endGame from '../assets/audio/end-game.wav'
-import { getVolume, VOLUME_MAIN } from './commands';
-import { createNewElement } from './my-little-fw';
+import './/style.scss'
+
+import correct from '../../assets/audio/correct.wav';
+import wrong from '../../assets/audio/lose.wav'
+import endGame from '../../assets/audio/end-game.wav'
+import { createNewElement } from '../../module/blocks-creator';
+import { getVolume, VOLUME_MAIN } from './player.hook';
 
 export const createPlayer = (_player, type) => {
   const _player__wrapper = createNewElement('.player__wrapper')

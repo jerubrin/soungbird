@@ -1,5 +1,5 @@
 import './/style.scss'
-import { createNewElement, createNewElements } from '../../module/my-little-fw'
+import { createNewElement, createNewElements } from '../../module/blocks-creator'
 
 export const createFooter = (root) => {
   const _footer = createNewElement('footer.footer')

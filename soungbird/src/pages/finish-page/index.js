@@ -2,10 +2,12 @@ import './/style.scss'
 
 import { createFooter } from "../../components/footer"
 import { createHeader } from "../../components/header/header"
-import { clearView, gameStatus, router } from "../../module/commands"
-import { createNewElement } from "../../module/my-little-fw"
-import { getTextByKey, setScore } from "../../module/settings"
-import { playEnd } from '../../module/player'
+import { createNewElement } from "../../module/blocks-creator"
+import { getTextByKey, setScore } from "../../module/content-filler"
+import { playEnd } from '../../components/player/player'
+import { router } from '../../module/router'
+import { clearView } from '../../module/clear-view'
+import { gameStatus } from '../../module/game-status'
 
 const MAX_SCORE = 30;
 
@@ -22,7 +24,20 @@ export default function openFinishPage(root) {
   createFooter(_main)
   
   _finish__button.onclick = 
-    gameStatus.score == MAX_SCORE ? router[0] : router[1];
+    gameStatus.score == MAX_SCORE ? toStartPage : toGamePage;
+}
+
+const toStartPage = () => {
+  clearGameState()
+  router[0]()
+}
+
+const toGamePage = () => {
+  clearGameState()
+  router[1]()
+}
+
+const clearGameState = () => {
   gameStatus.score = 0;
   gameStatus.missCh = [];
 }

@@ -1,105 +1,30 @@
-import openFinishPage from "../pages/finish-page";
-import openGalleryPage from "../pages/galery-page";
-import openGamePage, { DISPLAY_NONE } from "../pages/game-page";
-import openStartPage from "../pages/start-page";
-
-export const clearView = root => root.innerHTML = '';
-
-export const router = [
-  () => {
-    openStartPage(document.body)
-    stopAllPlayers()
-  },
-  () => {
-    openGamePage(document.body)
-    stopAllPlayers()
-  },
-  () => {
-    openGalleryPage(document.body)
-    stopAllPlayers()
-  },
-  () => {
-    openFinishPage(document.body)
-    stopAllPlayers()
-  },
-]
-
-export const gameStatus = {
-  isStarted: false,
-  chousedCorrectBird: false,
-  score: 0,
-  curScore: 5,
-  level: -1,
-  missCh: [],
-  correctBird: -1,
-  current: -1,
-  lastChoise: -1
-}
-
-export class useState {
-  constructor (initVal, _block) {
-    this.block = _block
-    this.setVal(initVal)
-  }
-  setVal(newVal) {
-    this.val = newVal
-    this.block.textContent = this.val
-  }
-}
-
-export class useImageState {
-  constructor (initVal, _block) {
-    this.block = _block
-    this.url = initVal
-    this.setVal(this.url)
-  }
-  setVal(newVal) {
-    this.url = newVal
-    if(this.url != '') {
-      this.block.setAttribute('style', `background-image: url(${this.url})`);
-    } else {
-      this.block.removeAttribute('style');
-    }
-  }
-}
-
-export class useClassState {
-  constructor (initVal, _block) {
-    this.block = _block
-    this.className = initVal
-    this.setVal(false)
-  }
-  setVal(newVal) {
-    newVal ? 
-      this.block.classList.add(this.className) :
-      this.block.classList.remove(this.className)
-  }
-}
+import { useClassState } from "../../module/hooks"
+import { DISPLAY_NONE } from "../../pages/game-page"
 
 const MUTED_CLASS = 'player__volume-btn_mute'
 
 const players = []
 export const stopAllPlayers = () => players.forEach(player => player.stop())
 
-export function usePlayerState(_block, type) {
+export function usePlayerState(_playerBlock, volumeType) {
   let audio = null
   let isPlaying = false
-  const _wrapper = _block.firstChild
-  const _playButton = _block.firstChild.children[0]
-  const _timeline = _block.firstChild.children[1].firstChild
-  const _curTime = _block.firstChild.children[1].children[1].firstChild
-  const _durTime = _block.firstChild.children[1].children[1].children[1]
+  const _wrapper = _playerBlock.firstChild
+  const _playButton = _playerBlock.firstChild.children[0]
+  const _timeline = _playerBlock.firstChild.children[1].firstChild
+  const _curTime = _playerBlock.firstChild.children[1].children[1].firstChild
+  const _durTime = _playerBlock.firstChild.children[1].children[1].children[1]
 
-  const _volumeButton = _block.firstChild.children[2]
-  const _volLine = _block.firstChild.children[3]
+  const _volumeButton = _playerBlock.firstChild.children[2]
+  const _volLine = _playerBlock.firstChild.children[3]
 
-  const _loading = _block.children[1]
+  const _loading = _playerBlock.children[1]
 
-  const loadingState = new useClassState(DISPLAY_NONE, _loading)
+  const loadingState = useClassState(DISPLAY_NONE, _loading)
   loadingState.setVal(false)
-  const playerDisplayState = new useClassState(DISPLAY_NONE, _wrapper);
+  const playerDisplayState = useClassState(DISPLAY_NONE, _wrapper);
   playerDisplayState.setVal(true)
-  const volumeButtonState = new useClassState(MUTED_CLASS, _volumeButton)
+  const volumeButtonState = useClassState(MUTED_CLASS, _volumeButton)
 
   let isMoving = false
   setInterval(() => {
@@ -133,7 +58,7 @@ export function usePlayerState(_block, type) {
     playerDisplayState.setVal(true)
     audio = new Audio(url)
     _timeline.valueAsNumber = 0;
-    _volLine.value = getVolume(type);
+    _volLine.value = getVolume(volumeType);
     volumeButtonState.setVal(_volLine.value == 0)
     audio.volume = _volLine.value / 100
     const t = {
@@ -143,11 +68,9 @@ export function usePlayerState(_block, type) {
       max: 100
     }
     setStyleForTimeline(t)
-    audio.onloadedmetadata = () => {
+    audio.onloadeddata = () => {
       _timeline.max = audio.duration;
       _durTime.textContent = getFormatedTime(audio.duration)
-    }
-    audio.onloadeddata = () => {
       loadingState.setVal(true)
       playerDisplayState.setVal(false)
     }
@@ -170,18 +93,18 @@ export function usePlayerState(_block, type) {
     setStyleForTimeline(e.target)
   }
   _volLine.onchange = function(e) {
-    setVolume(e.target.value, type)
+    setVolume(e.target.value, volumeType)
   }
 
   _volumeButton.onclick = function(e) {
     if(_volLine.valueAsNumber == 0) {
-      const vol = getWasVolume(type)
-      setVolume(vol, type)
+      const vol = getWasVolume(volumeType)
+      setVolume(vol, volumeType)
       _volLine.value = vol
       audio.volume = vol / 100
     } else {
-      setWasVolume(_volLine.valueAsNumber, type);
-      setVolume(0, type)
+      setWasVolume(_volLine.valueAsNumber, volumeType);
+      setVolume(0, volumeType)
       _volLine.value = 0
       audio.volume = 0
     }
@@ -227,20 +150,20 @@ export function usePlayerState(_block, type) {
 export const VOLUME_MAIN = 'VOLUME_MAIN';
 export const VOLUME_ADDITIONAL = 'VOLUME_ADDITIONAL';
 
-function setVolume(vol, type){
-  localStorage.setItem(type, vol)
+function setVolume(vol, volumeType){
+  localStorage.setItem(volumeType, vol)
 }
-export function getVolume(type){
-  const vol = localStorage.getItem(type);
+export function getVolume(volumeType){
+  const vol = localStorage.getItem(volumeType);
   return vol ? vol : 100
 }
 
-function setWasVolume(vol, type){
-  localStorage.setItem(type + "_WAS", vol)
+function setWasVolume(vol, volumeType){
+  localStorage.setItem(volumeType + "_WAS", vol)
 }
 
-function getWasVolume(type){
-  const vol = localStorage.getItem(type + "_WAS");
+function getWasVolume(volumeType){
+  const vol = localStorage.getItem(volumeType + "_WAS");
   return vol ? vol : 100
 }
 
