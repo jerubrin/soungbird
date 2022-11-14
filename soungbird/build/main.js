@@ -302,13 +302,19 @@ function usePlayerState(_playerBlock, volumeType) {
       max: 100
     }
     setStyleForTimeline(t)
-    audio.preload = 'metadata'
-    audio.onloadeddata = () => {
+
+    const loadPlayer =() => {
       _timeline.max = audio.duration;
       _durTime.textContent = getFormatedTime(audio.duration)
       loadingState.setVal(true)
       playerDisplayState.setVal(false)
     }
+
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)){
+      loadPlayer()
+    }
+      
+    audio.onloadeddata = loadPlayer
   }
   
   _timeline.oninput = e => {
