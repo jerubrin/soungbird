@@ -11,7 +11,7 @@
   ],
   "welcomeText": "Welcome to the game, here you will learn how to guess birdsong by ear",
   "startBtn": "Start!",
-  "galeryBtn": "Galery",
+  "galleryBtn": "Gallery",
 
   "score": "Score:",
   "scoreStart": "Best Score:",
@@ -22,7 +22,7 @@
   "links": [
     "Start Page", 
     "Quiz Page",
-    "Galery"
+    "Gallery"
   ],
 
   "congratulations": "Congratulations!",
@@ -30,5 +30,7 @@
   "outOf": "out of",
   "possiblePoints": "possible points",
   "tryAgain": "Try again!",
-  "toStart": "Open Start Page!"
+  "toStart": "Open Start Page!",
+    
+  "galleryTitle": "Gallery"
 }

@@ -1,4 +1,5 @@
 import openFinishPage from "../pages/finish-page";
+import openGalleryPage from "../pages/galery-page";
 import openGamePage, { DISPLAY_NONE } from "../pages/game-page";
 import openStartPage from "../pages/start-page";
 
@@ -7,18 +8,19 @@ export const clearView = root => root.innerHTML = '';
 export const router = [
   () => {
     openStartPage(document.body)
-    players.forEach(player => player.stop())
+    stopAllPlayers()
   },
   () => {
     openGamePage(document.body)
-    players.forEach(player => player.stop())
+    stopAllPlayers()
   },
   () => {
-    
+    openGalleryPage(document.body)
+    stopAllPlayers()
   },
   () => {
     openFinishPage(document.body)
-    players.forEach(player => player.stop())
+    stopAllPlayers()
   },
 ]
 
@@ -76,7 +78,9 @@ export class useClassState {
 
 const MUTED_CLASS = 'player__volume-btn_mute'
 
-export const players = []
+const players = []
+export const stopAllPlayers = () => players.forEach(player => player.stop())
+
 export function usePlayerState(_block, type) {
   let audio = null
   let isPlaying = false

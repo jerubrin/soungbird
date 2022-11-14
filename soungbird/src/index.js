@@ -1,4 +1,5 @@
 import './style/main.scss'
 import openStartPage from './pages/start-page'
+import openGalleryPage from './pages/galery-page'
 
-openStartPage(document.body)
+openGalleryPage(document.body)
