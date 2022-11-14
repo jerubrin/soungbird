@@ -52,11 +52,14 @@ const createView = (root) => {
   const textTitle = getTextByKey("congratulations");
   const _finish__title = createNewElement(`.finish__title=${textTitle}`)
   const text = 
-    getTextByKey('youPassed') + ' ' +
-    gameStatus.score + ' ' +
-    getTextByKey('outOf') + ' ' +
-    MAX_SCORE + ' ' +
-    getTextByKey('possiblePoints');
+    (gameStatus.score < MAX_SCORE) ?
+      getTextByKey('youPassed') + ' ' +
+      gameStatus.score + ' ' +
+      getTextByKey('outOf') + ' ' +
+      MAX_SCORE + ' ' +
+      getTextByKey('possiblePoints') :
+      getTextByKey('maxScore')
+
   const _finish__text = createNewElement(`.finish__text.text=${text}`)
   const btnText = gameStatus.score == MAX_SCORE ?
     getTextByKey('toStart') :

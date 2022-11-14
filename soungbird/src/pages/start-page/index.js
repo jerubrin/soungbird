@@ -21,7 +21,7 @@ export default function openStartPage(root) {
 }
 
 const createView = (root) => {
-  const _main =  createNewElement('main.main');
+  const _main =  createNewElement('main.main.main_start');
   const _container =  createNewElement('.container');
   const _startScreen =  createNewElement('.start-screen');
   const _startScreen__welcomeText =  createNewElement(`.start-screen__welcome-text=${getTextByKey("welcomeText")}`);

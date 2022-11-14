@@ -69,7 +69,8 @@ const createView = (root, _score) => {
   _aditional__top.append(_aditional__img, _aditional__left)
   _game__aditional.append(_aditional__top, _aditional__text)
 
-  const _game__nextBtn = createNewElement(`.game__next-btn.button=${getTextByKey('next')}`)
+  const nextText = getTextByKey('next')
+  const _game__nextBtn = createNewElement(`.game__next-btn.button=${nextText}`)
 
   _game__bottom.append(_game__select, _game__aditional)
   _game.append(_game__levelList, _game__main, _game__bottom, _game__nextBtn)
@@ -175,6 +176,11 @@ function startGame(blocksBundle) {
   }
 
   blocksBundle.next.onclick = nextLevel;
+  console.log(gameStatus.level)
+  blocksBundle.next.textContent = 
+      gameStatus.level < 5 ?
+      getTextByKey('next') :
+      getTextByKey('lastNext');
 
 
   function setRandomBird(level) {

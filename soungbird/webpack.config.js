@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require("terser-webpack-plugin")
 const FileLoader = require('file-loader')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -60,6 +61,7 @@ module.exports = {
     },
     devtool: isDev ? 'source-map' : false,
     plugins: [
+        new FaviconsWebpackPlugin('./src/assets/svg/bird-logo.svg'),
         new htmlWPPlugin({
             template: "./src/index.html",
             minify: {
@@ -67,19 +69,6 @@ module.exports = {
             }
         }),
         new CleanWebpackPlugin(),
-        new CopyWebpackPlugin({
-            patterns: [
-                // {
-                //     from: path.resolve(__dirname, 'src/assets/sounds/*.mp3'),
-                //     to: path.resolve(__dirname, 'build/assets/sounds'),
-                //     noErrorOnMissing: true
-                // },
-                {
-                    from: path.resolve(__dirname, 'src/assets/favicon/favicon.ico'),
-                    to: path.resolve(__dirname, 'build/assets')
-                }
-            ]
-        }),
         new MiniCSSExtractPlugin({
             filename: filename('css'),
         })

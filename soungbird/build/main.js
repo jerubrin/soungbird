@@ -810,11 +810,14 @@ const createView = (root) => {
   const textTitle = (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)("congratulations");
   const _finish__title = (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_3__.createNewElement)(`.finish__title=${textTitle}`)
   const text = 
-    (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('youPassed') + ' ' +
-    _module_game_status__WEBPACK_IMPORTED_MODULE_8__.gameStatus.score + ' ' +
-    (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('outOf') + ' ' +
-    MAX_SCORE + ' ' +
-    (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('possiblePoints');
+    (_module_game_status__WEBPACK_IMPORTED_MODULE_8__.gameStatus.score < MAX_SCORE) ?
+      (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('youPassed') + ' ' +
+      _module_game_status__WEBPACK_IMPORTED_MODULE_8__.gameStatus.score + ' ' +
+      (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('outOf') + ' ' +
+      MAX_SCORE + ' ' +
+      (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('possiblePoints') :
+      (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('maxScore')
+
   const _finish__text = (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_3__.createNewElement)(`.finish__text.text=${text}`)
   const btnText = _module_game_status__WEBPACK_IMPORTED_MODULE_8__.gameStatus.score == MAX_SCORE ?
     (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_4__.getTextByKey)('toStart') :
@@ -1067,7 +1070,8 @@ const createView = (root, _score) => {
   _aditional__top.append(_aditional__img, _aditional__left)
   _game__aditional.append(_aditional__top, _aditional__text)
 
-  const _game__nextBtn = (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_4__.createNewElement)(`.game__next-btn.button=${(0,_module_content_filler__WEBPACK_IMPORTED_MODULE_5__.getTextByKey)('next')}`)
+  const nextText = (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_5__.getTextByKey)('next')
+  const _game__nextBtn = (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_4__.createNewElement)(`.game__next-btn.button=${nextText}`)
 
   _game__bottom.append(_game__select, _game__aditional)
   _game.append(_game__levelList, _game__main, _game__bottom, _game__nextBtn)
@@ -1173,6 +1177,11 @@ function startGame(blocksBundle) {
   }
 
   blocksBundle.next.onclick = nextLevel;
+  console.log(_module_game_status__WEBPACK_IMPORTED_MODULE_10__.gameStatus.level)
+  blocksBundle.next.textContent = 
+      _module_game_status__WEBPACK_IMPORTED_MODULE_10__.gameStatus.level < 5 ?
+      (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_5__.getTextByKey)('next') :
+      (0,_module_content_filler__WEBPACK_IMPORTED_MODULE_5__.getTextByKey)('lastNext');
 
 
   function setRandomBird(level) {
@@ -1330,7 +1339,7 @@ function openStartPage(root) {
 }
 
 const createView = (root) => {
-  const _main =  (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_2__.createNewElement)('main.main');
+  const _main =  (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_2__.createNewElement)('main.main.main_start');
   const _container =  (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_2__.createNewElement)('.container');
   const _startScreen =  (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_2__.createNewElement)('.start-screen');
   const _startScreen__welcomeText =  (0,_module_blocks_creator__WEBPACK_IMPORTED_MODULE_2__.createNewElement)(`.start-screen__welcome-text=${(0,_module_content_filler__WEBPACK_IMPORTED_MODULE_3__.getTextByKey)("welcomeText")}`);
@@ -1418,7 +1427,7 @@ module.exports = JSON.parse('[[{"id":1,"name":"Ворон","species":"Corvus cor
   \**************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"lang":"en-en","name":"English","sections":["Warm-up","Passerines","Forest Birds","Songbirds","Predator Birds","Sea Birds"],"welcomeText":"Welcome to the game, here you will learn how to guess birdsong by ear","startBtn":"Start!","galleryBtn":"Gallery","score":"Score:","scoreStart":"Best Score:","next":"Next Level","message":"Listen to the player and select a bird from the list","alt":"bird","play":"play","links":["Start Page","Quiz Page","Gallery"],"congratulations":"Congratulations!","youPassed":"You passed the quiz and scored","outOf":"out of","possiblePoints":"possible points","tryAgain":"Try again!","toStart":"Open Start Page!","galleryTitle":"Gallery"}');
+module.exports = JSON.parse('{"lang":"en-en","name":"English","sections":["Warm-up","Passerines","Forest Birds","Songbirds","Predator Birds","Sea Birds"],"welcomeText":"Welcome to the game, here you will learn how to guess birdsong by ear","startBtn":"Start!","galleryBtn":"Gallery","score":"Score:","scoreStart":"Best Score:","next":"Next Level","lastNext":"Show Results!","message":"Listen to the player and select a bird from the list","alt":"bird","play":"play","links":["Start Page","Quiz Page","Gallery"],"congratulations":"Congratulations!","youPassed":"You passed the quiz and scored","outOf":"out of","possiblePoints":"possible points","maxScore":"You guessed all the birds and scored the maximum number of points!","tryAgain":"Try again!","toStart":"Open Start Page!","galleryTitle":"Gallery"}');
 
 /***/ }),
 
@@ -1428,7 +1437,7 @@ module.exports = JSON.parse('{"lang":"en-en","name":"English","sections":["Warm-
   \**************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"lang":"ru-ru","name":"Русский","sections":["Разминка","Воробьиные","Лесные птицы","Певчие Птицы","Хищные Птицы","Морские Птицы"],"welcomeText":"Добро пожаловать в игру, здесь вы научитесь угадывать пение птиц по звуку","startBtn":"Начать!","galleryBtn":"Галерея!","score":"Счет:","scoreStart":"Рекорд:","next":"Следующий Уровень","message":"Послушайте плеер и выберите птицу из списка","alt":"птица","play":"воспроизвести","links":["Стартовая","Викторина","Галерея"],"congratulations":"Поздравляем!","youPassed":"Вы прошли викторину и набрали","outOf":"из","possiblePoints":"возможных баллов","tryAgain":"Попробовать еще раз!","toStart":"На стартовую страницу!","galleryTitle":"Галерея"}');
+module.exports = JSON.parse('{"lang":"ru-ru","name":"Русский","sections":["Разминка","Воробьиные","Лесные птицы","Певчие Птицы","Хищные Птицы","Морские Птицы"],"welcomeText":"Добро пожаловать в игру, здесь вы научитесь угадывать пение птиц по звуку","startBtn":"Начать!","galleryBtn":"Галерея!","score":"Счет:","scoreStart":"Рекорд:","next":"Следующий Уровень","lastNext":"Показать результат!","message":"Послушайте плеер и выберите птицу из списка","alt":"птица","play":"воспроизвести","links":["Стартовая","Викторина","Галерея"],"congratulations":"Поздравляем!","youPassed":"Вы прошли викторину и набрали","outOf":"из","possiblePoints":"возможных баллов","maxScore":"Вы угадали всех птиц и набрали максимальное количество баллов!","tryAgain":"Попробовать еще раз!","toStart":"На стартовую страницу!","galleryTitle":"Галерея"}');
 
 /***/ })
 

@@ -16,6 +16,7 @@
   "score": "Score:",
   "scoreStart": "Best Score:",
   "next": "Next Level",
+  "lastNext": "Show Results!",
   "message": "Listen to the player and select a bird from the list",
   "alt": "bird",
   "play": "play",
@@ -29,6 +30,7 @@
   "youPassed": "You passed the quiz and scored",
   "outOf": "out of",
   "possiblePoints": "possible points",
+  "maxScore": "You guessed all the birds and scored the maximum number of points!",
   "tryAgain": "Try again!",
   "toStart": "Open Start Page!",
     
