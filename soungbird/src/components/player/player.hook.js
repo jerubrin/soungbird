@@ -79,9 +79,14 @@ export function usePlayerState(_playerBlock, volumeType) {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)){
       loadingState.setVal(true)
       playerDisplayState.setVal(false)
-      _playButton.addEventListener('click', () => {
-        audio.addEventListener('loadeddata', loadPlayer, false)
-      })
+      _playButton.addEventListener.onclick = () => {
+        audio.addEventListener('loadeddata', loadPlayer, false);
+        if(audio && isPlaying) {
+          stop()
+        } else if(audio && !isPlaying) {
+          play()
+        }
+      }
     }
       
     audio.addEventListener('loadeddata', loadPlayer, false)
