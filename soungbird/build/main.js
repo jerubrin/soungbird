@@ -311,10 +311,10 @@ function usePlayerState(_playerBlock, volumeType) {
     }
 
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)){
-      loadPlayer()
+      audio.autoplay = true
     }
       
-    audio.onloadeddata = loadPlayer
+    audio.addEventListener('loadeddata', loadPlayer, false)
   }
   
   _timeline.oninput = e => {
